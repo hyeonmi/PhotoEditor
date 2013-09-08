@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>photoEditor</title>
+<link rel="stylesheet" type="text/css" href="css/photo_editor.css">
+<link rel="stylesheet" type="text/css" href="js/vendor/spectrum/spectrum.css"/>
+</head>
+<body>
+<div class="wrap">
+ <!-- header -->
+ <header>
+  <div class="title">
+   <h1>PhotoEditor</h1>
+   <p>한 장당 10MB 1회 50MB까지 사진 올리기 가능(JPG, GIF, PNG, BMP)</p>
+  </div>
+ </header>
+ <!-- //header -->
+   
+ <!-- container -->
+ <div class="container">
+  <!-- content -->
+  <div class="thumb">
+   <ul>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+   </ul>
+  </div>
+  <!-- //content -->
+  <!-- content -->
+  <div class="content">
+   <div class="canvas">
+    <!--img src="img/img.jpg" width="680px" height="690px"-->
+       <!-- 4:3 비율이 디지털 사진기 비율-->
+       <canvas id="canvas" width="680px" height="510px" style="background-color: #fff">
+           Your browser does not support HTML5 Canvas
+       </canvas>
+   </div>
+  </div>
+  <!-- //content -->
+  <!-- content -->
+  <div class="controls">
+   <section class="set_area">
+    <button type="button" class="btn_add" id="add_photo">사진 추가</button>
+    <input type="file" id="file_upload" class="blind" multiple="multiple" >
+    <button type="button" class="btn_delete">모두 삭제</button>
+    <button type="button" class="btn_save">저장하기</button>
+   </section>
+   <section class="tool_area">
+    <h2 class="blind">편집 버튼 모음</h2>
+    <p class="img_size_txt"> 
+     사진 크기 <span class="img_size_value"> W : <em id="_photo_width">700</em>  H : <em id="_photo_height">700</em></span>
+    </p>
+    <select id="_resize_slt">
+    <option value="">가로크기변경</option>
+    <option value="">760</option>
+    <option value="">580</option>
+	<option value="">400</option>
+	<option value="">350</option>
+	<option value="">300</option>
+	<option value="">250</option>
+    </select>
+    <button type="button" class="btn_apply" id="_resize_all_btn">전체적용</button>
+    <button type="button" class="btn_reset" id="_refresh_btn">초기화</button>
+    <button type="button" class="btn_cancel" id="_undone_btn">실행취소</button>
+    <button type="button" class="btn_replay" id="_restore_btn">다시실행</button>
+    <button type="button" class="btn_rr" id="_rotate_right_btn"><img src="img/arrow-circle-right-icon.png" alt="오른쪽회전"/></button>
+    <button type="button" class="btn_rr" id="_rotate_left_btn"><img src="img/arrow-circle-left-icon.png" alt="왼쪽회전"/></button>
+    <button type="button" class="btn_rr" id="_crop_btn"><img src="img/image-crop-icon.png" alt="자르기"/></button>
+    <button type="button" class="btn_rr" id="_flip_hrz"><img src="img/layer-flip.png" alt="좌우반전"/></button>
+    <button type="button" class="btn_rr" id="_flip_vtc"><img src="img/layer-flip-vertical.png" alt="상하반전"/></button>
+   </section>
+   
+   <section class="tab_area">
+    <h2 class="blind">편집 툴 모음</h2>
+    <ul class="tab_menu">
+     <li class="on"><a href="#">효과</a></li>
+     <li class=""><a href="#">보정</a></li>
+     <li class=""><a href="#">텍스트</a></li>
+     <li class=""><a href="#">그리기</a></li>
+     <li class=""><a href="#">액자</a></li>
+     <li class=""><a href="#">서명</a></li>
+    </ul>
+    <div class="box_wrap" style="display:none">
+     <ul>
+      <li class="black">흑백</li>
+      <li class="clear">선명하게</li>
+      <li class="soft">부드럽게</li>
+      <li class="lomo">로모</li>
+      <li class="mozaic">모자이크</li>
+      <li class="bright">밝게</li>
+      <li class="exposure">노출</li>
+      <li class="sephia">세피아</li>
+      <li class="noise">노이즈</li>
+     </ul>
+    </div>
+	<div class="box_wrap 2" style="display:none">
+		<label for="slide_bright">밝기<span> 0 </span></label>
+		<button type="button" class="btn_minus">-</button>
+		<input type="range" id="slide_bright"class="slider_bar" value="50" min="0" max="100">
+		<button type="button" class="btn_plus">+</button>
+		<label for="slide_chroma">채도<span> 0 </span></label>
+		<button type="button" class="btn_minus">-</button>
+		<input type="range" id="slide_chroma"class="slider_bar" value="50" min="0" max="100">
+		<button type="button" class="btn_plus">+</button>
+		<label for="slide_color">색상<span> 0 </span></label>
+		<button type="button" class="btn_minus">-</button>
+		<input type="range" id="slide_color"class="slider_bar" value="50" min="0" max="100">
+		<button type="button" class="btn_plus">+</button>
+		<label for="slide_sharp">선명<span> 0 </span></label>
+		<button type="button" class="btn_minus">-</button>
+		<input type="range" id="slide_sharp"class="slider_bar" value="50" min="0" max="100">
+		<button type="button" class="btn_plus">+</button>
+		<button type="button" class="btn_reset">초기화</button>
+	</div>
+	<div class="box_wrap 3" style="display:block">
+		<input type="text" class="input_txt"  placeholder="텍스트를 입력하세요">
+		<button type="button" class="btn_add">추가</button>
+		<h3>텍스트</h3>
+		<div class="text_area">
+			<select class="font_style">
+			<option>돋움</option>
+			<option>굴림</option>
+			</select>
+			<select class="font_size">
+			<option>8</option>
+			<option>9</option>
+			<option>10</option>
+			</select>
+			<button type="button" class="btn_bold"><img src="img/border-color-icon.png" alt="굵게"/></button>
+			<button type="button" class="btn_slope"><img src="img/edit-italic.png" alt="기울게"/></button>
+			<div class="color_box"></div>
+			<span class="color_txt"> #FFFFFF </span>
+		</div>
+		<h3>배경</h3>
+		<div class="text_area">
+			<div class="color_box"></div>
+			<span class="color_txt"> #FFFFFF </span>
+		</div>
+	</div>
+   </section>
+   <!--div class="progress_area">
+		<progress value="10" max="100">
+			<strong>Progress:10%</strong>
+		</progress>
+		<p>사진을 추가하고 있습니다.</p>
+   </div-->
+  <!-- //content -->
+ </div>
+ <!-- //container -->
+ <!-- footer -->
+ <footer>
+ </footer>
+ <!-- //footer -->
+</div>
+    <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/vendor/spectrum/spectrum.js"></script>
+        <script type="text/javascript" src="js/PhotoEditor.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.File.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Editor.Size.js"></script>
+     <script type="text/javascript">
+        window.onload = function(){
+            (function(){
+                var file = new PhotoEditor.File();
+                var canvas = new PhotoEditor.Canvas();
+                var thumbnail = new PhotoEditor.Thumbnail({ "Canvas" : canvas});
+                var size = new PhotoEditor.Size({ "Canvas" : canvas});
+            })();
+        }
+    </script>
+</body>
+</html>
