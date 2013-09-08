@@ -1,0 +1,73 @@
+<<<<<<< HEAD
+@charset "utf-8";
+=======
+@charset "utf-8"; 
+>>>>>>> origin/master
+
+/* Common */
+body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select{margin:0;padding:0}
+body,input,textarea,select,button,table{font-family:'돋움',Dotum, Helvetica,sans-serif;font-size:12px}
+img,fieldset{border:0}
+ul,ol{list-style:none}
+em,address{font-style:normal}
+a{text-decoration:none}
+a:hover,a:active,a:focus{text-decoration:underline}
+<<<<<<< HEAD
+.blind{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:0}
+=======
+.blind{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:0} 
+>>>>>>> origin/master
+
+.wrap{width:1150px;margin:20px;font-family:'Helvetica','돋움',Dotum;font-size:12px}
+header{background:#000;padding:20px;color:#fff}
+.container{overflow:hidden;background-color:#000}
+.thumb{float:left;width:130px;height:740px;background:#292929}
+.thumb ul li{width:105px;height:80px;margin:10px 0 0 20px; background:#000;-webkit-border-radius:5px;-webkit-box-shadow:2px 2px 3px rgba(0,0,0,.4)}
+.content{float:left;width:720px;height:740px;background:#292929}
+.content .canvas{position:relative;width:720px;height:740px}
+.content .canvas img{display:block;position:absolute;top:10px;left:50%;margin-left:-340px;-webkit-box-shadow:2px 2px 3px rgba(0,0,0,.4)}
+.controls{float:left;width:300px;height:720px}
+.controls select{height:24px;background-color:#444;color:#888;border-color:#333}
+.controls button{display:inline-block;padding:5px;margin:0;vertical-align:top;cursor:pointer;font-weight:normal;font-size:11px;border:1px solid #000;text-decoration:none;background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #3e3e3e), color-stop(100%, #1c1c1c) );
+<<<<<<< HEAD
+    background-color:#3e3e3e;color:#999;text-shadow:1px 1px 0px 0px;-webkit-box-shadow:inset 1px 1px 0px 0px #6b6b6b;box-shadow:inset 1px 1px 0px 0px #6b6b6b;}
+=======
+background-color:#3e3e3e;color:#999;text-shadow:1px 1px 0px 0px;-webkit-box-shadow:inset 1px 1px 0px 0px #6b6b6b;box-shadow:inset 1px 1px 0px 0px #6b6b6b;}
+>>>>>>> origin/master
+.controls button:hover{	color:#555;background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #1c1c1c), color-stop(100%, #3e3e3e) );background-color:#1c1c1c}
+.controls button:active{position:relative;top:1px;}
+.controls .set_area{padding:20px 10px;background: -webkit-linear-gradient(top, #1f1f1f 0%,#151515 20%,#151515 100%)}
+.controls .set_area button.btn_add, .controls .set_area button.btn_delete, .controls .set_area button.btn_save{width:90px;height:50px}
+.controls .tool_area{margin-top:2px;padding:20px 10px;background: -webkit-linear-gradient(top, #1f1f1f 0%,#151515 20%,#151515 100%);}
+.controls .tool_area select{width:180px;margin-right:4px}
+.controls .tool_area button.btn_apply{width:90px;background:url()no-repeat)}
+.controls .tool_area button.btn_reset, .controls .tool_area button.btn_cancle, .controls .tool_area button.btn_replay{width:90px;margin-top:8px}
+.controls .tool_area button.btn_rr{width:53px;margin-top:8px}
+.controls .tool_area .img_size_txt{line-height:30px;font-size:14px;font-weight:bold;color:#fff;margin-bottom:20px;border-bottom:1px dotted #333}
+.controls .tool_area .img_size_txt .img_size_value{display:inline-block;float:right;color:#fff}
+.controls .tab_area{overflow:hidden;margin-top:2px}
+.controls .tab_area ul.tab_menu li{display:table-cell;float:left;width:16.32%;margin-right:1px;background:#ccc;text-align:center;background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #3e3e3e), color-stop(100%, #1c1c1c))}
+.controls .tab_area ul.tab_menu li.on{background:#eee;color:#555;background:-webkit-gradient( linear, left top, left bottom, color-stop(5%, #1c1c1c), color-stop(100%, #3e3e3e) )}
+.controls .tab_area ul.tab_menu li a{display:inline-block;color:#999;padding:20px 0}
+.controls .tab_area ul.tab_menu li a:hover{text-decoration:none}
+.controls .tab_area .box_wrap{overflow:hidden;width:100%;height:310px;margin:20px 20px 0 0;padding:10px 0 10px 10px;background:#3e3e3e}
+.controls .tab_area .box_wrap ul li{float:left;width:60px;height:60px;margin:4px 4px;background:#fff}
+.controls .tab_area .box_wrap label{display:block;padding-top:5px}
+.controls .tab_area .box_wrap input.slider_bar{width:150px}
+.controls .tab_area .box_wrap input.input_txt{width:175px;margin:10px 5px 0 0;height:20px}
+.controls .tab_area .box_wrap button.btn_txt_add{width:90px;margin-top:10px}
+.controls .tab_area .box_wrap h3{margin:15px 0 5px;color:#fff}
+.controls .tab_area .box_wrap select.font_style{width:180px;margin-right:5px;}
+.controls .tab_area .box_wrap select.font_size{width:90px}
+.controls .tab_area .box_wrap button.btn_reset{float:right;margin:5px 10px 0 0}
+.controls .tab_area .box_wrap button.btn_bold , .controls .tab_area .box_wrap button.btn_slope, .controls .tab_area .box_wrap button.btn_under{width:90px;margin-top:5px}
+/*.controls .tab_area .box_wrap .color_box{float:left;width:20px;height:20px;margin-top:10px;border:solid 1px #ccc;background-color:#fff}
+.controls .tab_area .box_wrap .color_txt{display:inline-block;width:80px;height:20px;margin:10px 0 0 10px;background-color:#fff;border:solid 1px #666;text-align:center;line-height:20px}*/
+.controls .progress_area{background-color:#3e3e3e;margin-top:2px;padding:20px 10px;background: -webkit-linear-gradient(top, #1f1f1f 0%,#151515 20%,#151515 100%)}
+.controls .progress_area progress{width:270px;height:14px;background-color:#287b66;background-image: -webkit-repeating-linear-gradient(45deg, rgba(37,166,133) 35px, rgba(37,166,133) 70px);}
+.controls .progress_area p{margin-bottom:5px;font-family:'돋움',Dotum;font-size:11px;font-weight:bold;color:#d8d8d8;line-height:12px}
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/master
