@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div style="border-color: gray;border:1px solid;">
+        <canvas id="canvas" width="500" height="500">
+            canvas
+        </canvas>
+    </div>
+</body>
+<script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    var img = new Image();
+    var radian = 90 * Math.PI /180;
+    var x = 100 + 50;
+    var y = 100 + 50;
+    img.src = "img/border-color-icon.png";
+    this.img.onload = function(){
+        context.save();
+        context.drawImage(img, 100, 100, 50, 50);
+        context.restore();
+
+        context.save();
+        context.translate(x, y);
+        context.fillRect(0,0,100,50);
+        context.rotate(90 * Math.PI /180);
+        context.drawImage(img, 0, 0, 50, 50);
+        context.restore();
+
+        context.save();
+        context.translate(x, y);
+        context.rotate(180 * Math.PI /180);
+        //context.drawImage(img, 0, 0, 50, 50);
+        context.restore();
+
+        context.save();
+        context.translate(x, y);
+        context.rotate(270 * Math.PI /180);
+        //context.drawImage(img, 0, 0, 50, 50);
+        context.restore();
+
+
+    }
+
+
+</script>
+</html>
