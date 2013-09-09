@@ -4,6 +4,8 @@ PhotoEditor.Canvas = function (options) {
     this.init();
 };
 PhotoEditor.Canvas.prototype = {
+    canvasDefaultWidth : 680,
+    canvasDefaultHeight : 510,
     init: function () {
         this._setElement();
     },
@@ -11,6 +13,12 @@ PhotoEditor.Canvas.prototype = {
         this._canvas = document.getElementById("canvas");
         this._context = this._canvas.getContext("2d");
         this._photo = new Image();
+    },
+    setDefault : function(){
+        this.setCanvasWidth(this.canvasDefaultWidth);
+        this.setCanvasHeight(this.canvasDefaultHeight);
+        this._clear();
+        this._repeat = 1;
     },
     getCanvas : function(){
         return this._canvas;
@@ -38,7 +46,6 @@ PhotoEditor.Canvas.prototype = {
         this._clear();
         this.setCanvasWidth(photoWidth);
         this.setCanvasHeight(photoHeight);
-
         this._context.drawImage(this._photo, 0, 0, photoWidth, photoHeight);
 
     },
@@ -66,36 +73,57 @@ PhotoEditor.Canvas.prototype = {
         return this._context.restore();
     },
     setCanvasWidth : function(width){
-        //this._canvas.setAttribute("style", "width:" + width +"px");
         this._canvas.width = width;
     },
     setCanvasHeight : function(height){
-        //this._canvas.setAttribute("style", "height:" + height +"px");
-        this._canvas.height = height
+        this._canvas.height = height;
     },
-    setRotate : function(){
+    setRotate : function(direction){
         this._repeat = this._repeat || 1;
-
-        var angle = (this._repeat * 90) * Math.PI / 180,
+        var rotateRepeat = this._repeat % 4;
+        var radian =  ((rotateRepeat * 90) * Math.PI / 180),
             canvasWidth = this._canvas.width,
             canvasHeight = this._canvas.height;
         this.save();
         this.setCanvasWidth(canvasHeight);
         this.setCanvasHeight(canvasWidth);
-        if(this._repeat === 1){
-            this._context.translate(canvasHeight, 0);
-            this._context.rotate(angle);
-            this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
+        if(direction === 1){
+            if(rotateRepeat === 1){
+                this._context.translate(canvasHeight, 0);
+                this._context.rotate(radian);
+                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
+            }else if(rotateRepeat === 2){
+                this._context.translate(canvasHeight, canvasWidth);
+                this._context.rotate(radian);
+                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
+            }else if(rotateRepeat === 3){
+                this._context.translate(0, canvasWidth);
+                this._context.rotate(radian);
+                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
+            }else{
+                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
+            }
 
-        }else if(this._repeat === 2){
-            this._context.translate(canvasHeight, canvasWidth);
-            this._context.rotate(angle);
-            this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
+        }else{
+            if(rotateRepeat === 1){
+                this._context.translate(0, canvasWidth);
+                this._context.rotate(radian);
+                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
+            }else if(rotateRepeat === 2){
+                this._context.translate(canvasHeight, canvasWidth);
+                this._context.rotate(radian);
+                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
+            }else if(rotateRepeat === 3){
+                this._context.translate(canvasHeight, 0);
+                this._context.rotate(radian);
+                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
+            }else{
+                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
+            }
+
         }
 
-
         this._repeat += 1;
-
         this.restore();
 
     }

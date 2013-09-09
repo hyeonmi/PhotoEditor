@@ -37,6 +37,7 @@ PhotoEditor.Thumbnail.prototype = {
         $(elImg).prop("src", we.target.result);
     },
     _setCanvas: function (e) {
+        this._Canvas.setDefault();
         this._Canvas.setSelectedImage(e);
         this._Canvas.setImage();
     }

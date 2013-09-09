@@ -24,7 +24,8 @@ PhotoEditor.Size.prototype = {
     },
     _attachEvent: function () {
         this._resizeSel.on("change", $.proxy(this._setResize, this));
-        this._rotateRightBtn.on("click", $.proxy(this._setRotate, this));
+        this._rotateRightBtn.on("click", $.proxy(this._setClockRotate, this));
+        this._rotateLeftBtn.on("click", $.proxy(this._setUnClockRotate, this));
     },
     _setResize : function(){
         var width = this._resizeSel.children(":selected").text();
@@ -32,8 +33,10 @@ PhotoEditor.Size.prototype = {
             this._Canvas.setCanvasWidth(width);
         }
     },
-    _setRotate : function(){
-
-        this._Canvas.setRotate();
+    _setClockRotate : function(){
+        this._Canvas.setRotate(1);
+    },
+    _setUnClockRotate : function(){
+        this._Canvas.setRotate(-1);
     }
 };
