@@ -125,5 +125,16 @@ PhotoEditor.Canvas.prototype = {
         this._context.rotate(degrees * Math.PI /180);
         this._context.drawImage(this._photo, changeX, changeY, photoWidth, photoHeight);
         this._context.restore();
+    },
+    /** */
+    setFlipVerticalty : function(){
+        this._context.translate(this._photoWidth, 0);
+        this._context.scale(-1, 1);
+        this._context.drawImage(this._photo, 0, 0, this._photoWidth, this._photoHeight);
+    },
+    setFlipHorizon : function(){
+        this._context.translate(0, this._photoHeight);
+        this._context.scale(1, -1);
+        this._context.drawImage(this._photo, 0, 0, this._photoWidth, this._photoHeight);
     }
 };

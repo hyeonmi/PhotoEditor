@@ -19,14 +19,15 @@ PhotoEditor.Size.prototype = {
         this._rotateRightBtn = $("#_rotate_right_btn");
         this._rotateLeftBtn = $("#_rotate_left_btn");
         this._cropBtn = $("#_crop_btn");
-        this._flipHrz = $("#_flip_hrz");
         this._flipVtc = $("#_flip_vtc");
+        this._flipHrz = $("#_flip_hrz");
     },
     _attachEvent: function () {
         this._resizeSel.on("change", $.proxy(this._setResize, this));
         this._rotateRightBtn.on("click", $.proxy(this._onClickClockRotateBtn, this));
         this._rotateLeftBtn.on("click", $.proxy(this._onClickUnClockRotateBtn, this));
         this._flipHrz.on("click", $.proxy(this._onClickFlipHrzBtn, this));
+        this._flipVtc.on("click", $.proxy(this._onClickFlipVtcBtn, this));
     },
     _setResize : function(){
         var width = this._resizeSel.children(":selected").text();
@@ -39,5 +40,11 @@ PhotoEditor.Size.prototype = {
     },
     _onClickUnClockRotateBtn : function(){
         this._Canvas.setRotatedUnClock();
+    },
+    _onClickFlipHrzBtn : function(){
+        this._Canvas.setFlipHorizon();
+    },
+    _onClickFlipVtcBtn : function(){
+        this._Canvas.setFlipVerticalty();
     }
 };
