@@ -10,6 +10,7 @@ PhotoEditor.Canvas.prototype = {
         this._setElement();
     },
     _setElement: function () {
+        this._canvasEl = $("#canvas");
         this._canvas = document.getElementById("canvas");
         this._context = this._canvas.getContext("2d");
         this._photo = new Image();
@@ -18,7 +19,7 @@ PhotoEditor.Canvas.prototype = {
         this.setCanvasWidth(this.canvasDefaultWidth);
         this.setCanvasHeight(this.canvasDefaultHeight);
         this._clear();
-        this._repeat = 1;
+        this.savingDegrees = 0;
     },
     getCanvas : function(){
         return this._canvas;
@@ -40,13 +41,15 @@ PhotoEditor.Canvas.prototype = {
         this._photo.src = imgURI;
     },
     _loadedImage: function () {
-        var percent = this._getPercent(),
-            photoWidth = this._photo.width * percent,
-            photoHeight = this._photo.height * percent;
+        var percent = this._getPercent();
+
+        this._photoWidth = this._photo.width * percent;
+        this._photoHeight = this._photo.height * percent;
+
         this._clear();
-        this.setCanvasWidth(photoWidth);
-        this.setCanvasHeight(photoHeight);
-        this._context.drawImage(this._photo, 0, 0, photoWidth, photoHeight);
+        this.setCanvasWidth(this._photoWidth);
+        this.setCanvasHeight(this._photoHeight);
+        this._context.drawImage(this._photo, 0, 0, this._photoWidth, this._photoHeight);
 
     },
     _getPercent: function () {
@@ -78,53 +81,49 @@ PhotoEditor.Canvas.prototype = {
     setCanvasHeight : function(height){
         this._canvas.height = height;
     },
-    setRotate : function(direction){
-        this._repeat = this._repeat || 1;
-        var rotateRepeat = this._repeat % 4;
-        var radian =  ((rotateRepeat * 90) * Math.PI / 180),
-            canvasWidth = this._canvas.width,
-            canvasHeight = this._canvas.height;
-        this.save();
-        this.setCanvasWidth(canvasHeight);
-        this.setCanvasHeight(canvasWidth);
-        if(direction === 1){
-            if(rotateRepeat === 1){
-                this._context.translate(canvasHeight, 0);
-                this._context.rotate(radian);
-                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
-            }else if(rotateRepeat === 2){
-                this._context.translate(canvasHeight, canvasWidth);
-                this._context.rotate(radian);
-                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
-            }else if(rotateRepeat === 3){
-                this._context.translate(0, canvasWidth);
-                this._context.rotate(radian);
-                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
-            }else{
-                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
-            }
+    /** size 조절 관련*/
+    setResize : function(width){
+        this._canvasEl.css("width", width);
+    },
 
-        }else{
-            if(rotateRepeat === 1){
-                this._context.translate(0, canvasWidth);
-                this._context.rotate(radian);
-                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
-            }else if(rotateRepeat === 2){
-                this._context.translate(canvasHeight, canvasWidth);
-                this._context.rotate(radian);
-                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
-            }else if(rotateRepeat === 3){
-                this._context.translate(canvasHeight, 0);
-                this._context.rotate(radian);
-                this._context.drawImage(this._photo, 0, 0, canvasWidth, canvasHeight);
-            }else{
-                this._context.drawImage(this._photo, 0, 0, canvasHeight, canvasWidth);
-            }
+    /** rotate 관련 메소드 */
+    setRotateClock : function(){
+        this.savingDegrees += 90;
+        this._drawRotated(this.savingDegrees);
+    },
+    setRotatedUnClock : function(){
+        this.savingDegrees -= 90;
+        this._drawRotated(this.savingDegrees);
+    },
+    _drawRotated :function(degrees){
+        var photoWidth = this._photoWidth,
+            photoHeight = this._photoHeight,
+            changeWidth = photoWidth,
+            changeHeight = photoHeight,
+            changeX = 0,
+            changeY = 0,
+            loof = (degrees/90)%4;
 
+        if(loof === 1 || loof === -3){
+            changeWidth = photoHeight;
+            changeHeight = photoWidth;
+            changeY = photoHeight * (-1);
+        }else if(loof === 2 || loof === -2){
+            changeWidth = photoWidth;
+            changeHeight = photoHeight;
+            changeX = photoWidth * (-1);
+            changeY = photoHeight * (-1);
+        }else if(loof === 3 || loof === -1){
+            changeWidth = photoHeight;
+            changeHeight = photoWidth;
+            changeX = photoWidth * (-1);
         }
 
-        this._repeat += 1;
-        this.restore();
-
+        this._context.save();
+        this.setCanvasWidth(changeWidth);
+        this.setCanvasHeight(changeHeight);
+        this._context.rotate(degrees * Math.PI /180);
+        this._context.drawImage(this._photo, changeX, changeY, photoWidth, photoHeight);
+        this._context.restore();
     }
 };
