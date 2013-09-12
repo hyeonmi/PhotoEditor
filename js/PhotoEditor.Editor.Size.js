@@ -24,19 +24,20 @@ PhotoEditor.Size.prototype = {
     },
     _attachEvent: function () {
         this._resizeSel.on("change", $.proxy(this._setResize, this));
-        this._rotateRightBtn.on("click", $.proxy(this._setClockRotate, this));
-        this._rotateLeftBtn.on("click", $.proxy(this._setUnClockRotate, this));
+        this._rotateRightBtn.on("click", $.proxy(this._onClickClockRotateBtn, this));
+        this._rotateLeftBtn.on("click", $.proxy(this._onClickUnClockRotateBtn, this));
+        this._flipHrz.on("click", $.proxy(this._onClickFlipHrzBtn, this));
     },
     _setResize : function(){
         var width = this._resizeSel.children(":selected").text();
         if(isNaN(width)===false){
-            this._Canvas.setCanvasWidth(width);
+            this._Canvas.setResize(width);
         }
     },
-    _setClockRotate : function(){
-        this._Canvas.setRotate(1);
+    _onClickClockRotateBtn : function(){
+        this._Canvas.setRotateClock();
     },
-    _setUnClockRotate : function(){
-        this._Canvas.setRotate(-1);
+    _onClickUnClockRotateBtn : function(){
+        this._Canvas.setRotatedUnClock();
     }
 };
