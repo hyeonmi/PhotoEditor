@@ -148,7 +148,7 @@ jQuery.fn = jQuery.prototype = {
 		return this;
 	},
 
-	// Execute a callback for every element in the matched set.
+	// Execute a _callback for every element in the matched set.
 	// (You can seed the arguments with an array of args, but this is
 	// only used internally.)
 	each: function( callback, args ) {
@@ -3050,7 +3050,7 @@ function bindReady(){
 
 	// Mozilla, Opera and webkit nightlies currently support this event
 	if ( document.addEventListener ) {
-		// Use the handy event callback
+		// Use the handy event _callback
 		document.addEventListener( "DOMContentLoaded", function(){
 			document.removeEventListener( "DOMContentLoaded", arguments.callee, false );
 			jQuery.ready();
@@ -3242,7 +3242,7 @@ jQuery.fn.extend({
 		if ( params )
 			// If it's a function
 			if ( jQuery.isFunction( params ) ) {
-				// We assume that it's the callback
+				// We assume that it's the _callback
 				callback = params;
 				params = null;
 
@@ -3410,9 +3410,9 @@ jQuery.extend({
 		if ( s.dataType == "jsonp" ) {
 			if ( type == "GET" ) {
 				if ( !s.url.match(jsre) )
-					s.url += (s.url.match(/\?/) ? "&" : "?") + (s.jsonp || "callback") + "=?";
+					s.url += (s.url.match(/\?/) ? "&" : "?") + (s.jsonp || "__callback") + "=?";
 			} else if ( !s.data || !s.data.match(jsre) )
-				s.data = (s.data ? s.data + "&" : "") + (s.jsonp || "callback") + "=?";
+				s.data = (s.data ? s.data + "&" : "") + (s.jsonp || "__callback") + "=?";
 			s.dataType = "json";
 		}
 
@@ -3579,7 +3579,7 @@ jQuery.extend({
 				if ( status == "success" ) {
 					// Watch for, and catch, XML document parse errors
 					try {
-						// process the data (runs the xml through httpData regardless of callback)
+						// process the data (runs the xml through httpData regardless of _callback)
 						data = jQuery.httpData( xhr, s.dataType, s );
 					} catch(e) {
 						status = "parsererror";
@@ -3597,7 +3597,7 @@ jQuery.extend({
 					if ( s.ifModified && modRes )
 						jQuery.lastModified[s.url] = modRes;
 
-					// JSONP handles its own success callback
+					// JSONP handles its own success _callback
 					if ( !jsonp )
 						success();
 				} else
@@ -3640,11 +3640,11 @@ jQuery.extend({
 			onreadystatechange();
 
 		function success(){
-			// If a local callback was specified, fire it and pass it the data
+			// If a local _callback was specified, fire it and pass it the data
 			if ( s.success )
 				s.success( data, status );
 
-			// Fire the global callback
+			// Fire the global _callback
 			if ( s.global )
 				jQuery.event.trigger( "ajaxSuccess", [xhr, s] );
 		}
@@ -3668,10 +3668,10 @@ jQuery.extend({
 	},
 
 	handleError: function( s, xhr, status, e ) {
-		// If a local callback was specified, fire it
+		// If a local _callback was specified, fire it
 		if ( s.error ) s.error( xhr, status, e );
 
-		// Fire the global callback
+		// Fire the global _callback
 		if ( s.global )
 			jQuery.event.trigger( "ajaxError", [xhr, s, e] );
 	},

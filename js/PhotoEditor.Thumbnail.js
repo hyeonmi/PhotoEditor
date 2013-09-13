@@ -8,13 +8,12 @@ PhotoEditor.Thumbnail.prototype = {
         this._setElement();
         this._attachEvent();
         this.index = 0;
-        this._Canvas = this.Canvas;
     },
     _setElement: function () {
         this.waThumbnail = $(".thumb ul li").find("img");
     },
     _attachEvent: function () {
-        this.waThumbnail.on("click", $.proxy(this._setCanvas, this));
+        this.waThumbnail.on("click", $.proxy(this._onClickThumnail, this));
         $(document).on("file.change", $.proxy(this.setFileToThumbnail, this));
     },
     /**
@@ -30,15 +29,15 @@ PhotoEditor.Thumbnail.prototype = {
             reader.onloadend = $.proxy(this._setThumbnail, this, fi);
             reader.readAsDataURL(file);
         }
-
     },
     _setThumbnail: function (index, we) {
         var elImg = this.waThumbnail[index];
         $(elImg).prop("src", we.target.result);
     },
-    _setCanvas: function (e) {
-        this._Canvas.setDefault();
-        this._Canvas.setSelectedImage(e);
-        this._Canvas.setImage();
+    _onClickThumnail: function (e) {
+        var Image = new PhotoEditor.Image(e , $.proxy(this.completeLoadImage, this));
+    },
+    completeLoadImage : function(){
+        console.log("ondraw");
     }
 };

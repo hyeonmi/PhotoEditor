@@ -22,8 +22,8 @@
   <!-- content -->
   <div class="thumb">
    <ul>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="img/img.jpg" width="80px" height="80px"></a></li>
+    <li class=""><a href="#"><img src="img/img.jpg" width="80px" height="80px"></a></li>
     <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
     <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
     <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
@@ -160,20 +160,20 @@
  <!-- //footer -->
 </div>
     <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/vendor/spectrum/spectrum.js"></script>
         <script type="text/javascript" src="js/PhotoEditor.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.File.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Image.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Editor.Size.js"></script>
      <script type="text/javascript">
         window.onload = function(){
             (function(){
-                var potoEditor = new PhotoEditor();
+                //var potoEditor = new PhotoEditor();
                 var file = new PhotoEditor.File();
                 var canvas = new PhotoEditor.Canvas();
                 var thumbnail = new PhotoEditor.Thumbnail({ "Canvas" : canvas});
-                var size = new PhotoEditor.Size({ "Canvas" : canvas});
+                //var size = new PhotoEditor.Size({ "Canvas" : canvas});
             })();
         }
     </script>
