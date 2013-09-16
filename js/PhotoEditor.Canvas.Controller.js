@@ -88,8 +88,12 @@ PhotoEditor.Canvas.Controller.prototype = {
         var imageData = this._Canvas.getCanvas().toDataURL();
         this._canvasImage.setCallback(null);
         this._canvasImage.setImageSrc(imageData);
-        this._canvasImage.setWidth(changeWidth);
-        this._canvasImage.setHeight(changeHeight);
+        if(isNaN(changeWidth) === false){
+            this._canvasImage.setWidth(changeWidth);
+        }
+        if(isNaN(changeHeight) === false){
+            this._canvasImage.setHeight(changeHeight);
+        }
     },
     _drawRotated: function (degrees) {
         var canvas = this._Canvas,
@@ -118,19 +122,27 @@ PhotoEditor.Canvas.Controller.prototype = {
         this.saveCanvasImage(changeWidth, changeHeight);
     },
     /** 반전 효과 */
-    //TODO photo load된 후에
     setFlipVerticalty: function () {
-        var canvasData = this._canvas.toDataURL();
-        this._canvasImage.src = canvasData;
-        this._context.translate(this._canvas.width, 0);
-        this._context.scale(-1, 1);
-        this.drawImage();
+        var context = this._Canvas.getContext();
+        var photoWidth = this._canvasImage.getWidth(),
+            photoHeight = this._canvasImage.getHeight();
+
+        this._Canvas.save();
+        context.translate(this._canvasImage.getWidth(), 0);
+        context.scale(-1, 1);
+        context.drawImage(this._canvasImage.getImage(), 0,0, photoWidth, photoHeight);
+        this._Canvas.restore();
+        this.saveCanvasImage();
     },
     setFlipHorizon: function () {
-        var canvasData = this._canvas.toDataURL();
-        this._canvasImage.src = canvasData;
-        this._context.translate(0, this._canvas.height);
-        this._context.scale(1, -1);
-        this.drawImage();
+        var context = this._Canvas.getContext();
+        var photoWidth = this._canvasImage.getWidth(),
+            photoHeight = this._canvasImage.getHeight();
+        this._Canvas.save();
+        context.translate(0, this._canvasImage.getHeight());
+        context.scale(1, -1);
+        context.drawImage(this._canvasImage.getImage(), 0,0, photoWidth, photoHeight);
+        this._Canvas.restore();
+        this.saveCanvasImage();
     }
 };
