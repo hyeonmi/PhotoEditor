@@ -13,21 +13,20 @@ PhotoEditor.Thumbnail.prototype = {
         this.waThumbnail = $(".thumb ul li");
     },
     _attachEvent: function () {
-        this.waThumbnail.on("click", $.proxy(this._onClickThumnail, this));
-        $(document).on("image.created", $.proxy(this.setFileToThumbnail, this));
+        this.waThumbnail.on("click", "img",$.proxy(this._onClickThumnail, this));
+        $(document).on("image.created", $.proxy(this._setFileToThumbnail, this));
     },
-    setFileToThumbnail: function (we, images) {
+    _setFileToThumbnail: function (event, images) {
         for(var fi = 0; fi < this.waThumbnail.length; fi +=1){
             var thumnail = $(this.waThumbnail[fi]);
-            if(thumnail.find("img") !== undefined){
-                thumnail.appendTo(images);
+            if(thumnail.find("img").length === 0){
+                thumnail.append(images);
+                return true;
             }
         }
     },
-    _onClickThumnail: function (e) {
-        var Image = new PhotoEditor.Image(e , $.proxy(this.completeLoadImage, this));
-    },
-    completeLoadImage : function(){
-        console.log("ondraw");
+    _onClickThumnail : function(event){
+        var thumnail = $(event.currentTarget);
+        $(document).trigger("canvas.drawthumnail", [thumnail]);
     }
 };

@@ -13,6 +13,9 @@
    <h1>PhotoEditor</h1>
    <p>한 장당 10MB 1회 50MB까지 사진 올리기 가능(JPG, GIF, PNG, BMP)</p>
   </div>
+     <style type="text/css">
+         .thumb ul li img{width:80px;height:80px}
+     </style>
  </header>
  <!-- //header -->
    
@@ -21,8 +24,8 @@
   <!-- content -->
   <div class="thumb">
    <ul>
-    <li class=""><img src="img/img.jpg" width="80px" height="80px"></li>
-    <li class=""></li>
+    <li class=""><img src="img/img.jpg"></li>
+    <li class="image"></li>
     <li class=""></li>
     <li class=""></li>
     <li class=""></li>
@@ -162,19 +165,18 @@
         <script type="text/javascript" src="js/PhotoEditor.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.File.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Canvas.Controller.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Image.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Image.Collection.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Editor.Size.js"></script>
      <script type="text/javascript">
         window.onload = function(){
             (function(){
                 //var potoEditor = new PhotoEditor();
                 var file = new PhotoEditor.File();
-                var canvas = new PhotoEditor.Canvas();
+                var canvasController = new PhotoEditor.Canvas.Controller();
                 var ImgCollection = new PhotoEditor.Image.Collection();
-                var thumbnail = new PhotoEditor.Thumbnail({ "Canvas" : canvas});
-                //var size = new PhotoEditor.Size({ "Canvas" : canvas});
+                var thumbnail = new PhotoEditor.Thumbnail();
             })();
         }
     </script>

@@ -20,7 +20,7 @@ PhotoEditor.Image.prototype = {
         this._key = this.key;
         this._image = new Image();
         this._attachEvent();
-        this._image.src = this.file.target.result;
+        this._image.src = this.fileSrc;
     },
     _attachEvent : function(){
         $(this._image).on("load", $.proxy(this._loadedImage, this));
@@ -29,14 +29,27 @@ PhotoEditor.Image.prototype = {
         if(this._callback !==  null){
             this._callback(this._image);
         }
+        return this;
     },
-    setImage: function (e) {
-        this._image = e;
+    setImageSrc: function (src) {
+        this._image.src = src;
     },
     getImage: function () {
         return this._image;
     },
     setCallback : function(callback){
         this._callback = callback;
+    },
+    getWidth : function(){
+        return this._image.width;
+    },
+    getHeight : function(){
+        return this._image.height;
+    },
+    setWidth : function(width){
+        this._image.width = width;
+    },
+    setHeight : function(height){
+        this._image.height = height;
     }
 };

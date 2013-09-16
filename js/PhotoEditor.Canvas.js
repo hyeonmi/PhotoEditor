@@ -10,20 +10,12 @@ PhotoEditor.Canvas.prototype = {
         this._setElement();
     },
     _setElement: function () {
-        this._canvasEl = $("#canvas");
+        this._canvasElement = $("#canvas");
         this._canvas = document.getElementById("canvas");
         this._context = this._canvas.getContext("2d");
-        this._photo = new Image();
-        this._photoWidth = 0;
-        this._photoHeight = 0;
-        this._callback =  null;
-
     },
-    setDefault: function () {
-        this.setCanvasWidth(this.canvasDefaultWidth);
-        this.setCanvasHeight(this.canvasDefaultHeight);
-        this._clear();
-        this.savingDegrees = 0;
+    getCanvasElement : function(){
+        return this._canvasElement;
     },
     getCanvas: function () {
         return this._canvas;
@@ -31,48 +23,27 @@ PhotoEditor.Canvas.prototype = {
     getContext: function () {
         return this._context;
     },
-    setSelectedImage: function (e) {
-        this._selectedImage = e;
-    },
-    getSelectedImage: function () {
-        return this._selectedImage;
-    },
-    _attachEvnet : function(){
-        $(this._photo).on("load", $.proxy(this._loadedImage, this, this._callback));
-    },
 
-    setImage: function () {
-        var e = this.getSelectedImage();
-        var imgURI = e.target.src;
-        this._photo.src = imgURI;
+    drawImage: function (Image) {
+        var photo = Image.getImage();
+        var photoWidth = Image.getWidth(),
+            photoHeight = Image.getHeight();
+        var percent = this._getPercent(photoWidth, photoHeight),
+            scaledPhotoWidth = photoWidth * percent,
+            scaledPhotoHeight = photoHeight * percent;
+
+        this.setCanvasWidth(scaledPhotoWidth);
+        this.setCanvasHeight(scaledPhotoHeight);
+        Image.setWidth(scaledPhotoWidth);
+        Image.setHeight(scaledPhotoHeight);
+        this._context.drawImage(photo, 0, 0, photoWidth, photoHeight, 0,0, scaledPhotoWidth, scaledPhotoHeight);
     },
-    drawImage: function (image, imageWidth, imageHeight) {
-        this.setCanvasWidth(imageWidth);
-        this.setCanvasHeight(imageHeight);
-        //this._clear();
-        this._context.drawImage(image, 0, 0,imageWidth, imageHeight, 0, 0, this.canvasWidth, this.canvasHeight);
-    }, 
-    _loadedImage: function (callback) {
-        if(this._photoHeight === 0 && this._photoWidth === 0){
-            var percent = this._getPercent();
-            this._photoWidth = this._photo.width * percent;
-            this._photoHeight = this._photo.height * percent;
-        }
-
-
-        this._clear();
-        this.setCanvasWidth(this._photoWidth);
-        this.setCanvasHeight(this._photoHeight);
-        this.drawImage();
-        if(callback !== null){
-            callback();
-        }
-
-    },
-    _getPercent: function () {
+    _getPercent: function (photoWidth, photoHeight) {
         var percent = 1;
-        var photoWidth = this._photo.width,
-            photoHeight = this._photo.height;
+        //canvas보다 이미지 사이즈가 작을 경우 100%
+        if(this.canvasDefaultWidth >= photoWidth && this.canvasDefaultHeight >= photoHeight){
+            return percent;
+        }
         if (photoWidth >= photoHeight) {
             percent = Math.min(this.canvasDefaultWidth, photoWidth) / Math.max(this.canvasDefaultWidth, photoWidth);
         } else {
@@ -80,7 +51,7 @@ PhotoEditor.Canvas.prototype = {
         }
         return percent;
     },
-    _clear: function () {
+    clear: function () {
         this._context.fillStyle = "#ffffff";
         this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
     },
@@ -96,66 +67,10 @@ PhotoEditor.Canvas.prototype = {
     setCanvasHeight: function (height) {
         this._canvas.height = height;
     },
-    /** size 조절 관련*/
-    setResize: function (width) {
-        this._canvasEl.css("width", width);
+    getCanvasWidth : function(){
+        return this._canvas.width;
     },
-
-    /** rotate 관련 메소드 */
-    setRotateClock: function () {
-        this.savingDegrees += 90;
-        this._drawRotated(this.savingDegrees);
-    },
-    setRotatedUnClock: function () {
-        this.savingDegrees -= 90;
-        this._drawRotated(this.savingDegrees);
-    },
-    _drawRotated: function (degrees) {
-        var photoWidth = this._photoWidth,
-            photoHeight = this._photoHeight,
-            changeWidth = photoWidth,
-            changeHeight = photoHeight,
-            changeX = 0,
-            changeY = 0,
-            loof = (degrees / 90) % 4,
-            angleInRaians = degrees * Math.PI / 180;
-
-        if (loof === 1 || loof === -3) {
-            changeWidth = photoHeight;
-            changeHeight = photoWidth;
-            changeY = photoHeight * (-1);
-        } else if (loof === 2 || loof === -2) {
-            changeWidth = photoWidth;
-            changeHeight = photoHeight;
-            changeX = photoWidth * (-1);
-            changeY = photoHeight * (-1);
-        } else if (loof === 3 || loof === -1) {
-            changeWidth = photoHeight;
-            changeHeight = photoWidth;
-            changeX = photoWidth * (-1);
-        }
-
-        this.save();
-        this.setCanvasWidth(changeWidth);
-        this.setCanvasHeight(changeHeight);
-        this._context.rotate(angleInRaians);
-        this._context.drawImage(this._photo, changeX, changeY, photoWidth, photoHeight);
-        this.restore();
-            },
-    /** 반전 효과 */
-        //TODO photo load된 후에
-    setFlipVerticalty: function () {
-        var canvasData = this._canvas.toDataURL();
-        this._photo.src = canvasData;
-        this._context.translate(this._canvas.width, 0);
-        this._context.scale(-1, 1);
-        this.drawImage();
-    },
-    setFlipHorizon: function () {
-        var canvasData = this._canvas.toDataURL();
-        this._photo.src = canvasData;
-        this._context.translate(0, this._canvas.height);
-        this._context.scale(1, -1);
-        this.drawImage();
+    getCanvasHeight : function(){
+        return this._canvas.height;
     }
 };
