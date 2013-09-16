@@ -18,27 +18,26 @@ PhotoEditor.File.prototype = {
         this._welAddFileBtn = $("#add_photo");
     },
     _attachEvent : function(){
-        this._welAddFileBtn.on("click", $.proxy(this._openFileUpload, this));
-        this._welFileUpload.on("change", $.proxy(this._selectedFiles, this));
+        this._welAddFileBtn.on("click", $.proxy(this._onClickAddFileBtn, this));
+        this._welFileUpload.on("change", $.proxy(this._onChangeFileUpload, this));
     },
-    _openFileUpload : function(){
+    _onClickAddFileBtn : function(){
         this._welFileUpload.trigger("click");
     },
-    _selectedFiles : function(e){
+    _onChangeFileUpload : function(e){
         var files = e.target.files;
-
         if(this._validFiles(files)){
             $(document).trigger("file.change", [files]);
         }
     },
     _validFiles: function (files) {
-        var sFileError = this._getFileErr(files);
-        if (sFileError === this.ERROR_TYPE_NOT_IMAGE) {
+        var fileErrorType = this._checkFileError(files);
+        if (fileErrorType === this.ERROR_TYPE_NOT_IMAGE) {
             alert("이미지 파일만 선택 가능합니다.");
             return false;
         }
 
-        if(sFileError === this.ERROR_TYPE_OVER_MAX_SIZE){
+        if(fileErrorType === this.ERROR_TYPE_OVER_MAX_SIZE){
             alert("용량이 " + this.FILE_MAX_SIZE_MB + "MB 미만인 파일만 선택 가능합니다.");
             return false;
         }
@@ -49,18 +48,18 @@ PhotoEditor.File.prototype = {
         }
         return true;
     },
-    _getFileErr : function(files){
+    _checkFileError : function(files){
         var fileCount = files.length,
-            sNotUseFile = "";
+            fileErrorType = "";
         for(var fi=0; fi < fileCount; fi += 1){
             if(files[fi].type.match(/image.*/) === null){
-                sNotUseFile = this.ERROR_TYPE_NOT_IMAGE;
+                fileErrorType = this.ERROR_TYPE_NOT_IMAGE;
             }
             if(files[fi].size > 1048576 * this.FILE_MAX_SIZE_MB){
-                sNotUseFile = this.ERROR_TYPE_OVER_MAX_SIZE;
+                fileErrorType = this.ERROR_TYPE_OVER_MAX_SIZE;
             }
         }
-        return sNotUseFile;
+        return fileErrorType;
     }
 
 };

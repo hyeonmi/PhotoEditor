@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <title>photoEditor</title>
 <link rel="stylesheet" type="text/css" href="css/photo_editor.css">
-<link rel="stylesheet" type="text/css" href="js/vendor/spectrum/spectrum.css"/>
 </head>
 <body>
 <div class="wrap">
@@ -22,15 +21,15 @@
   <!-- content -->
   <div class="thumb">
    <ul>
-    <li class=""><a href="#"><img src="img/img.jpg" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="img/img.jpg" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-    <li class=""><a href="#"><img src="" width="80px" height="80px"></a></li>
-   </ul>
+    <li class=""><img src="img/img.jpg" width="80px" height="80px"></li>
+    <li class=""></li>
+    <li class=""></li>
+    <li class=""></li>
+    <li class=""></li>
+    <li class=""></li>
+    <li class=""></li>
+    <li class=""></li>
+    </ul>
   </div>
   <!-- //content -->
   <!-- content -->
@@ -165,6 +164,7 @@
     <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Image.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Image.Collection.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Editor.Size.js"></script>
      <script type="text/javascript">
         window.onload = function(){
@@ -172,6 +172,7 @@
                 //var potoEditor = new PhotoEditor();
                 var file = new PhotoEditor.File();
                 var canvas = new PhotoEditor.Canvas();
+                var ImgCollection = new PhotoEditor.Image.Collection();
                 var thumbnail = new PhotoEditor.Thumbnail({ "Canvas" : canvas});
                 //var size = new PhotoEditor.Size({ "Canvas" : canvas});
             })();
