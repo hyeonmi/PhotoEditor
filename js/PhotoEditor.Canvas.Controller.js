@@ -17,6 +17,7 @@ PhotoEditor.Canvas.Controller = function (options) {
 PhotoEditor.Canvas.Controller.prototype = {
     init : function(){
         this._Canvas = new PhotoEditor.Canvas();
+
         this._setElement();
         this._attachEvnet();
     },
@@ -31,7 +32,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._cropBtn = $("#_crop_btn");
         this._flipVtc = $("#_flip_vtc");
         this._flipHrz = $("#_flip_hrz");
-        this.savingDegrees = 0;
+        this._dragging = false;
     },
     _attachEvnet : function(){
         $(document).on("canvas.drawthumnail", $.proxy(this.setThumnail, this));
@@ -40,6 +41,28 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._rotateLeftBtn.on("click", $.proxy(this._onClickUnClockRotateBtn, this));
         this._flipHrz.on("click", $.proxy(this._onClickFlipHrzBtn, this));
         this._flipVtc.on("click", $.proxy(this._onClickFlipVtcBtn, this));
+        this._Canvas.getCanvasElement().on("mousedown", $.proxy(this._onMouseDownCanvas, this));
+        this._Canvas.getCanvasElement().on("mousemove", $.proxy(this._onDrag, this));
+        this._Canvas.getCanvasElement().on("mouseup", $.proxy(this._onMouseUpCanvas, this));
+    },
+    _onMouseDownCanvas : function(event){
+        var location = this._windowToCanvas(this._Canvas.getCanvas(), event.clientX, event.clientY);
+        event.preventDefault();
+        this._rubberbandStart(location.x, location.y);
+        this._dragging = true;
+    },
+    _rubberbandStart : function(x,y){
+        console.log(x, y);
+    },
+    _onMouseUpCanvas : function(){
+
+    },
+    _onDrag : function(){
+
+    },
+    _windowToCanvas : function(canvas, x, y){
+        var canvasRectangle = canvas.getBoundingClientRect();
+        return { x : x - canvasRectangle.left , y : y - canvasRectangle.top}
     },
     _onChangeResizeSel : function(){
         var width = this._resizeSel.children(":selected").text();
@@ -77,12 +100,10 @@ PhotoEditor.Canvas.Controller.prototype = {
 
     /** rotate 관련 메소드 */
     setRotateClock: function () {
-        this.savingDegrees = 90;
-        this._drawRotated(this.savingDegrees);
+        this._drawRotated(90);
     },
     setRotatedUnClock: function () {
-        this.savingDegrees = -90;
-        this._drawRotated(this.savingDegrees);
+        this._drawRotated(-90);
     },
     saveCanvasImage : function(changeWidth, changeHeight){
         var imageData = this._Canvas.getCanvas().toDataURL();
