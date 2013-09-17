@@ -13,7 +13,7 @@ PhotoEditor.Thumbnail.prototype = {
         this.waThumbnail = $(".thumb ul li");
     },
     _attachEvent: function () {
-        this.waThumbnail.on("click", "img",$.proxy(this._onClickThumnail, this));
+        this.waThumbnail.on("click", "img",$.proxy(this._onClickThumbnail, this));
         $(document).on("image.created", $.proxy(this._setFileToThumbnail, this));
     },
     _setFileToThumbnail: function (event, images) {
@@ -25,8 +25,8 @@ PhotoEditor.Thumbnail.prototype = {
             }
         }
     },
-    _onClickThumnail : function(event){
-        var thumnail = $(event.currentTarget);
-        $(document).trigger("canvas.drawthumnail", [thumnail]);
+    _onClickThumbnail : function(event){
+        var thumbnail = $(event.currentTarget);
+        $(document).trigger("canvas.drawthumbnail", [thumbnail]);
     }
 };
