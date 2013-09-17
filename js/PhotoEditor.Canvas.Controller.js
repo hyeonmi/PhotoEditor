@@ -35,7 +35,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._dragging = false;
     },
     _attachEvnet : function(){
-        $(document).on("canvas.drawthumnail", $.proxy(this.setThumnail, this));
+        $(document).on("canvas.drawthumbnail", $.proxy(this.setThumnail, this));
         this._resizeSel.on("change", $.proxy(this._onChangeResizeSel, this));
         this._rotateRightBtn.on("click", $.proxy(this._onClickClockRotateBtn, this));
         this._rotateLeftBtn.on("click", $.proxy(this._onClickUnClockRotateBtn, this));
@@ -109,6 +109,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         var imageData = this._Canvas.getCanvas().toDataURL();
         this._canvasImage.setCallback(null);
         this._canvasImage.setImageSrc(imageData);
+
         if(isNaN(changeWidth) === false){
             this._canvasImage.setWidth(changeWidth);
         }
@@ -132,38 +133,39 @@ PhotoEditor.Canvas.Controller.prototype = {
         } else if (degrees === -90) {
             changeX = photoWidth * (-1);
         }
-
-        canvas.save();
+        //canvas width, height을 변경했을 경우 상태값은 저장되지 않아야함
         canvas.setCanvasWidth(changeWidth);
         canvas.setCanvasHeight(changeHeight);
+        canvas.save();
         context.rotate(angleInRaians);
         context.drawImage(this._canvasImage.getImage(), changeX, changeY, photoWidth, photoHeight);
-        canvas.restore();
         //마지막 상태를 저장
         this.saveCanvasImage(changeWidth, changeHeight);
+        canvas.restore();
     },
     /** 반전 효과 */
     setFlipVerticalty: function () {
-        var context = this._Canvas.getContext();
+        var canvas = this._Canvas;
+        var context = canvas.getContext();
         var photoWidth = this._canvasImage.getWidth(),
             photoHeight = this._canvasImage.getHeight();
-
-        this._Canvas.save();
-        context.translate(this._canvasImage.getWidth(), 0);
+        canvas.save();
+        context.translate(photoWidth, 0);
         context.scale(-1, 1);
-        context.drawImage(this._canvasImage.getImage(), 0,0, photoWidth, photoHeight);
-        this._Canvas.restore();
+        context.drawImage(this._canvasImage.getImage(), 0,0, photoWidth, photoHeight,0,0, photoWidth, photoHeight);
         this.saveCanvasImage();
+        canvas.restore();
     },
     setFlipHorizon: function () {
-        var context = this._Canvas.getContext();
+        var canvas = this._Canvas;
+        var context = canvas.getContext();
         var photoWidth = this._canvasImage.getWidth(),
             photoHeight = this._canvasImage.getHeight();
-        this._Canvas.save();
-        context.translate(0, this._canvasImage.getHeight());
+        canvas.save();
+        context.translate(0, photoHeight);
         context.scale(1, -1);
         context.drawImage(this._canvasImage.getImage(), 0,0, photoWidth, photoHeight);
-        this._Canvas.restore();
         this.saveCanvasImage();
+        canvas.restore();
     }
 };
