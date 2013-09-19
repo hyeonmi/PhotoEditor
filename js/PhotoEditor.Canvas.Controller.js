@@ -17,10 +17,12 @@ PhotoEditor.Canvas.Controller = function (options) {
 PhotoEditor.Canvas.Controller.prototype = {
     init: function () {
         this._Canvas = new PhotoEditor.Canvas();
+        this._Effect = new PhotoEditor.Effect(this._Canvas);
 
         this._setElement();
         this._attachEvnet();
         this._initRubberband();
+
     },
     _setElement: function () {
         this._resizeSel = $("#_resize_slt");
@@ -98,7 +100,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         canvas.save();
         canvas.setCanvasWidth(resultWidth);
         canvas.setCanvasHeight(resultHeight);
-        context.drawImage(this._canvasImage.getImage(),
+        context.drawImage(this._CanvasImage.getImage(),
             rubberbandRect.left - canvasBox.left,
             rubberbandRect.top - canvasBox.top,
             resultWidth,
@@ -149,97 +151,58 @@ PhotoEditor.Canvas.Controller.prototype = {
      * @param thumbnail
      */
     setThumnail: function (event, thumbnail) {
-        this._canvasImage = new PhotoEditor.Image({ "fileSrc": thumbnail[0].src, "callback": $.proxy(this._loadedImage, this)});
+        this._CanvasImage = new PhotoEditor.Image({ "fileSrc": thumbnail[0].src, "callback": $.proxy(this._loadedImage, this)});
     },
     _loadedImage: function () {
-        this._Canvas.drawImage(this._canvasImage);
+        this._Canvas.drawImage(this._CanvasImage);
         this.saveCanvasImage();
+
     },
     /** size 조절 관련*/
     setResize: function (width) {
         this._Canvas.getCanvasElement().css("width", width);
     },
-    /** rotate 관련 메소드 */
-    setRotateClock: function () {
-        this._drawRotated(90);
-    },
-
     _onClickClockRotateBtn: function () {
         this.setRotateClock();
     },
+
     _onClickUnClockRotateBtn: function () {
         this.setRotatedUnClock();
     },
+    /** flip */
     _onClickFlipHrzBtn: function () {
-        this.setFlipHorizon();
+        PhotoEditor.Canvas.Flip(this._Canvas, this._CanvasImage, "Horizon");
+        this.saveCanvasImage();
     },
     _onClickFlipVtcBtn: function () {
-        this.setFlipVerticalty();
+        PhotoEditor.Canvas.Flip(this._Canvas, this._CanvasImage, "Verticalty");
+        this.saveCanvasImage();
+    },
+    /** rotate 관련 메소드 */
+    setRotateClock: function () {
+        var changeArea = PhotoEditor.Canvas.Rotate(this._Canvas, this._CanvasImage, 90);
+        this.saveCanvasImage(changeArea.changeWidth, changeArea.changeHeight);
     },
     setRotatedUnClock: function () {
-        this._drawRotated(-90);
+        var changeArea = PhotoEditor.Canvas.Rotate(this._Canvas, this._CanvasImage, -90);
+        this.saveCanvasImage(changeArea.changeWidth, changeArea.changeHeight);
     },
+    /**
+     * 현재 캔버스의 이미지를 저장한다
+     * @param {number} changeWidth
+     * @param {number} changeHeight
+     */
     saveCanvasImage: function (changeWidth, changeHeight) {
         var imageData = this._Canvas.getCanvas().toDataURL();
-        this._canvasImage.setCallback(null);
-        this._canvasImage.setImageSrc(imageData);
+        this._CanvasImage.setCallback(null);
+        this._CanvasImage.setImageSrc(imageData);
 
         if (isNaN(changeWidth) === false) {
-            this._canvasImage.setWidth(changeWidth);
+            this._CanvasImage.setWidth(changeWidth);
         }
         if (isNaN(changeHeight) === false) {
-            this._canvasImage.setHeight(changeHeight);
+            this._CanvasImage.setHeight(changeHeight);
         }
-    },
-    _drawRotated: function (degrees) {
-        var canvas = this._Canvas,
-            context = canvas.getContext();
-        var photoWidth = this._canvasImage.getWidth(),
-            photoHeight = this._canvasImage.getHeight(),
-            changeWidth = photoHeight,
-            changeHeight = photoWidth,
-            changeX = 0,
-            changeY = 0,
-            angleInRaians = degrees * Math.PI / 180;
-
-        if (degrees === 90) {
-            changeY = photoHeight * (-1);
-        } else if (degrees === -90) {
-            changeX = photoWidth * (-1);
-        }
-        //canvas width, height을 변경했을 경우 상태값은 저장되지 않아야함
-        canvas.setCanvasWidth(changeWidth);
-        canvas.setCanvasHeight(changeHeight);
-        canvas.save();
-        context.rotate(angleInRaians);
-        context.drawImage(this._canvasImage.getImage(), changeX, changeY, photoWidth, photoHeight);
-        //마지막 상태를 저장
-        this.saveCanvasImage(changeWidth, changeHeight);
-        canvas.restore();
-    },
-    /** 반전 효과 */
-    setFlipVerticalty: function () {
-        var canvas = this._Canvas;
-        var context = canvas.getContext();
-        var photoWidth = this._canvasImage.getWidth(),
-            photoHeight = this._canvasImage.getHeight();
-        canvas.save();
-        context.translate(photoWidth, 0);
-        context.scale(-1, 1);
-        context.drawImage(this._canvasImage.getImage(), 0, 0, photoWidth, photoHeight, 0, 0, photoWidth, photoHeight);
-        this.saveCanvasImage();
-        canvas.restore();
-    },
-    setFlipHorizon: function () {
-        var canvas = this._Canvas;
-        var context = canvas.getContext();
-        var photoWidth = this._canvasImage.getWidth(),
-            photoHeight = this._canvasImage.getHeight();
-        canvas.save();
-        context.translate(0, photoHeight);
-        context.scale(1, -1);
-        context.drawImage(this._canvasImage.getImage(), 0, 0, photoWidth, photoHeight);
-        this.saveCanvasImage();
-        canvas.restore();
+        this._Effect.onLoadFilter(this._CanvasImage);
     }
 };
