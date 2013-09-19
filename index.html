@@ -91,15 +91,16 @@
     </ul>
     <div class="box_wrap _effect" style="display:block">
      <ul>
-      <li class="black">흑백</li>
-      <li class="clear">선명하게</li>
-      <li class="soft">부드럽게</li>
-      <li class="lomo">로모</li>
-      <li class="mozaic">모자이크</li>
-      <li class="bright">밝게</li>
-      <li class="exposure">노출</li>
-      <li class="sephia">세피아</li>
-      <li class="noise">노이즈</li>
+        <li class="origin"><canvas style="width:60px;height:60px" class="filter" width="60" height="60" id="_origin"></canvas></li>
+        <li class="gray"><canvas style="width:60px;height:60px" class="filter" width="60" height="60" id="_grayscale"></canvas></li>
+        <li class="brightness"><canvas class="filter" width="60" height="60" id="_brightness"></canvas></li>
+        <li class="brown"><canvas class="filter" width="60" height="60" id="_brown"></canvas></li>
+        <li class=""><canvas class="filter" width="60" height="60" id="_sepia"></canvas></li>
+         <li class=""><canvas class="filter" width="60" height="60" id="_noise"></canvas></li>
+         <li class="blur"><canvas class="filter" width="60" height="60" id="_blur"></canvas></li>
+         <li class=""><canvas class="filter" width="60" height="60" id="_negative"></canvas></li>
+        <li class=""><canvas class="filter" width="60" height="60" id="_emboss"></canvas></li>
+        <li class=""><canvas class="filter" width="60" height="60" id="_sharpen"></canvas></li>
      </ul>
     </div>
 	<div class="box_wrap 2 _tone" style="display:none">
@@ -163,17 +164,21 @@
  <!-- //footer -->
 </div>
     <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="js/PhotoEditor.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.File.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.Controller.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Canvas.Flip.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Canvas.Rotate.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Image.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Image.Collection.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Filters.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Effect.js"></script>
      <script type="text/javascript">
         window.onload = function(){
             (function(){
-                //var potoEditor = new PhotoEditor();
+                var potoEditor = new PhotoEditor();
                 var file = new PhotoEditor.File();
                 var canvasController = new PhotoEditor.Canvas.Controller();
                 var ImgCollection = new PhotoEditor.Image.Collection();
