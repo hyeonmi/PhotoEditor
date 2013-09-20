@@ -1,3 +1,13 @@
+/**
+ * 기타 이벤트 처리
+ * @class
+ * @name PhotoEditor.
+ * @namespace
+ * @author heyonmi.kim@nts.com
+ * @version 0.0.1
+ * @since 13. 9. 16
+ * @copyright heyonmi.kim
+ */
 var PhotoEditor = function (options) {
     $.extend(this, options || {});
     this.init();

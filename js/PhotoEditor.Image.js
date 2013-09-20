@@ -1,12 +1,12 @@
 /**
- *
+ * 이미지 객체
  * @class
  * @name PhotoEditor.
  * @namespace
  * @author heyonmi.kim@nts.com
  * @version 0.0.1
  * @since 13. 9. 13
- * @copyright Copyright (c) 2012, NHN Technology Services inc.
+ * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
 PhotoEditor.Image = function (options) {

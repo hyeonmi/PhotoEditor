@@ -1,11 +1,11 @@
 /**
- * 설명을 작성하세요
+ * 이미지 시계방향,반시계방향 회전
  * @names nts.PhotoEditor
  * @namespace
  * @author heyonmi.kim@nts.com
  * @version 0.0.1
  * @since 13. 9. 19.
- * @copyright Copyright (c) 2012, NHN Technology Services inc.
+ * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
 PhotoEditor.Canvas = PhotoEditor.Canvas || {};

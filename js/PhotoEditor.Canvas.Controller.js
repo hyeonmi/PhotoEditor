@@ -6,7 +6,7 @@
  * @author heyonmi.kim@nts.com
  * @version 0.0.1
  * @since 13. 9. 16
- * @copyright Copyright (c) 2012, NHN Technology Services inc.
+ * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
 PhotoEditor.Canvas = PhotoEditor.Canvas || {};
@@ -17,7 +17,7 @@ PhotoEditor.Canvas.Controller = function (options) {
 PhotoEditor.Canvas.Controller.prototype = {
     init: function () {
         this._Canvas = new PhotoEditor.Canvas();
-        this._Effect = new PhotoEditor.Effect(this._Canvas);
+        this._Effect = new PhotoEditor.Effect();
 
         this._setElement();
         this._attachEvnet();
@@ -26,8 +26,6 @@ PhotoEditor.Canvas.Controller.prototype = {
     },
     _setElement: function () {
         this._resizeSel = $("#_resize_slt");
-        this._resizeAllBtn = $("#_resize_all_btn");
-        this._refreshBtn = $("#_refresh_btn");
         this._undoneBtn = $("#_undone_btn");
         this._resotreBtn = $("#_restore_btn");
         this._rotateRightBtn = $("#_rotate_right_btn");
@@ -41,7 +39,7 @@ PhotoEditor.Canvas.Controller.prototype = {
 
     },
     _attachEvnet: function () {
-        $(document).on("canvas.drawthumbnail", $.proxy(this.setThumnail, this));
+        $(document).on("canvas.drawthumbnail", $.proxy(this.setThumbnail, this));
         this._resizeSel.on("change", $.proxy(this._onChangeResizeSel, this));
         this._rotateRightBtn.on("click", $.proxy(this._onClickClockRotateBtn, this));
         this._rotateLeftBtn.on("click", $.proxy(this._onClickUnClockRotateBtn, this));
@@ -51,8 +49,47 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._Canvas.getCanvasElement().on("mousemove", $.proxy(this._onMouseMoveCanvas, this));
         $(window).on("mouseup", $.proxy(this._onMouseUpCanvas, this));
         this._cropBtn.on("click", $.proxy(this._onClickCropBtn, this));
-    },
 
+        $("#_grayscale").on("click", $.proxy(this._onClickFilters, this, "GrayScale"));
+        $("#_brightness").on("click", $.proxy(this._onClickFilters, this, "Brightness"));
+        $("#_brown").on("click", $.proxy(this._onClickFilters, this, "Brown"));
+        $("#_sepia").on("click", $.proxy(this._onClickFilters, this, "Sepia"));
+        $("#_noise").on("click", $.proxy(this._onClickFilters, this, "Noise"));
+        $("#_negative").on("click", $.proxy(this._onClickFilters, this, "Negative"));
+        $("#_blur").on("click", $.proxy(this._onClickFilters, this, "Blur"));
+        $("#_emboss").on("click", $.proxy(this._onClickFilters, this, "Emboss"));
+        $("#_sharpen").on("click", $.proxy(this._onClickFilters, this, "Sharpen"));
+
+        $(".btn_save").on("click", $.proxy(this._onClickSave, this));
+    },
+    _onClickSave : function(){
+        var strDownloadMime = "image/octet-stream";
+        var strMime = "image/jpeg";
+        var strData = this._Canvas.getCanvas().toDataURL("image/jpeg");
+        document.location.href = strData.replace(strMime, strDownloadMime);
+    },
+    /**
+     * 효과탭의 필터 미리 보기 클릭시 호출되는 이벤트
+     * @param filterName
+     * @private
+     */
+    _onClickFilters: function (filterName) {
+        this._putFilterImage(filterName);
+    },
+    /**
+     * 해당 필터를 편집하고 있는 캔버스에 적용 시킨다
+     * @param filter
+     * @private
+     */
+    _putFilterImage: function (filter) {
+        var canvas = this._Canvas;
+        var context = canvas.getContext();
+        var imageData = context.getImageData(0, 0, canvas.getCanvasWidth(), canvas.getCanvasHeight());
+        var filterName = PhotoEditor.Filters[filter];
+        var filteredImageData = filterName.call(PhotoEditor.Filters, imageData);
+        context.putImageData(filteredImageData, 0, 0);
+        this.saveCanvasImage();
+    },
     /** crop */
     _onClickCropBtn: function () {
         this._isCrop = true;
@@ -141,22 +178,34 @@ PhotoEditor.Canvas.Controller.prototype = {
     /** 가로 크기 변경 */
     _onChangeResizeSel: function () {
         var width = this._resizeSel.children(":selected").text();
-        if (isNaN(width) === false) {
-            this.setResize(width);
+        if (isNaN(width)) {
+            return false;
         }
+        var Canvas = this._Canvas,
+            Context = Canvas.getContext(),
+            CanvasImage = this._CanvasImage;
+        var imgWidth = CanvasImage.getWidth(),
+            imgHeight = CanvasImage.getHeight();
+        var parseWidth = parseInt(width, 10),
+            parseHeight = (imgHeight * parseWidth) / imgWidth;
+
+        Canvas.setCanvasWidth(parseWidth);
+        Canvas.setCanvasHeight(parseHeight);
+        Context.drawImage(CanvasImage.getImage(), 0, 0, parseWidth, parseHeight);
+        this.saveCanvasImage();
     },
     /**
      * 썸네일 클릭시 호출되는 이벤트
      * @param event
      * @param thumbnail
      */
-    setThumnail: function (event, thumbnail) {
+    setThumbnail: function (event, thumbnail) {
         this._CanvasImage = new PhotoEditor.Image({ "fileSrc": thumbnail[0].src, "callback": $.proxy(this._loadedImage, this)});
     },
     _loadedImage: function () {
         this._Canvas.drawImage(this._CanvasImage);
         this.saveCanvasImage();
-
+        this._Effect.onLoadFilter(this._CanvasImage);
     },
     /** size 조절 관련*/
     setResize: function (width) {
@@ -203,6 +252,5 @@ PhotoEditor.Canvas.Controller.prototype = {
         if (isNaN(changeHeight) === false) {
             this._CanvasImage.setHeight(changeHeight);
         }
-        this._Effect.onLoadFilter(this._CanvasImage);
     }
 };

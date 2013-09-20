@@ -1,12 +1,12 @@
 /**
- *
+ * 이미지 객체를 담고 있는 배열
  * @class
  * @name PhotoEditor.
  * @namespace
  * @author heyonmi.kim@nts.com
  * @version 0.0.1
  * @since 13. 9. 16
- * @copyright Copyright (c) 2012, NHN Technology Services inc.
+ * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
 PhotoEditor.Image = PhotoEditor.Image || {};

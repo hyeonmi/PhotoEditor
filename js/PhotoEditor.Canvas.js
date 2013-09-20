@@ -1,3 +1,13 @@
+/**
+ * 캔버스
+ * @class
+ * @name PhotoEditor.
+ * @namespace
+ * @author heyonmi.kim@nts.com
+ * @version 0.0.1
+ * @since 13. 9. 16
+ * @copyright heyonmi.kim
+ */
 var PhotoEditor = PhotoEditor || {};
 PhotoEditor.Canvas = function (options) {
     $.extend(this, options || {});
@@ -23,7 +33,6 @@ PhotoEditor.Canvas.prototype = {
     getContext: function () {
         return this._context;
     },
-
     drawImage: function (Image) {
         var photo = Image.getImage();
         var photoWidth = Image.getWidth(),

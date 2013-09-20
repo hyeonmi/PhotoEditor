@@ -1,3 +1,13 @@
+/**
+ * 썸네일 관련 이벤트 모음
+ * @class
+ * @name PhotoEditor.
+ * @namespace
+ * @author heyonmi.kim@nts.com
+ * @version 0.0.1
+ * @since 13. 9. 16
+ * @copyright heyonmi.kim
+ */
 var PhotoEditor = PhotoEditor || {};
 PhotoEditor.Thumbnail = function (options) {
     $.extend(this, options || {});

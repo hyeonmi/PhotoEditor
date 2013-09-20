@@ -1,15 +1,14 @@
 /**
- * 설명을 작성하세요
+ * 효과 탭의 필터 적용 화면 미리보기
  * @names nts.PhotoEditor
  * @namespace
  * @author heyonmi.kim@nts.com
  * @version 0.0.1
  * @since 13. 9. 19.
- * @copyright Copyright (c) 2012, NHN Technology Services inc.
+ * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
-PhotoEditor.Effect = function(canvas){
-    this._Canvas = canvas;
+PhotoEditor.Effect = function(){
     this.init();
 };
 PhotoEditor.Effect.prototype = {
@@ -17,7 +16,6 @@ PhotoEditor.Effect.prototype = {
     HEIGHT : 60,
     init : function(){
         this._setElement();
-        this._attachEvent();
     },
     _setElement : function(){
         this._originCanvas = document.getElementById("_origin");
@@ -36,26 +34,10 @@ PhotoEditor.Effect.prototype = {
         this._negativeContext = this._negativeCanvas.getContext("2d");
         this._blurCanvas = document.getElementById("_blur");
         this._blurContext = this._blurCanvas.getContext("2d");
-
         this._embossCanvas = document.getElementById("_emboss");
         this._embossContext = this._embossCanvas.getContext("2d");
         this._sharpenCanvas = document.getElementById("_sharpen");
         this._sharpenContext = this._sharpenCanvas.getContext("2d");
-    },
-    _attachEvent : function(){
-        $("#_grayscale").on("click", $.proxy(this._onClickFilters, this ,"GrayScale"));
-        $("#_brightness").on("click", $.proxy(this._onClickFilters, this, "Brightness"));
-        $("#_brown").on("click", $.proxy(this._onClickFilters, this, "Brown"));
-        $("#_sepia").on("click", $.proxy(this._onClickFilters, this, "Sepia"));
-        $("#_noise").on("click", $.proxy(this._onClickFilters, this, "Noise"));
-        $("#_negative").on("click", $.proxy(this._onClickFilters, this, "Negative"));
-        $("#_blur").on("click", $.proxy(this._onClickFilters, this, "Blur"));
-        $("#_emboss").on("click", $.proxy(this._onClickFilters, this, "Emboss"));
-        $("#_sharpen").on("click", $.proxy(this._onClickFilters, this, "Sharpen"));
-
-    },
-    _onClickFilters : function(filterName){
-        this._putFilterImage(filterName);
     },
     onLoadFilter: function (canvasImage) {
         this._originContext.drawImage(canvasImage.getImage(),
@@ -91,22 +73,7 @@ PhotoEditor.Effect.prototype = {
         this._putImageData(this._sharpenContext, sharpenImageData);
 
     },
-    _putImageData : function(context, imagedata){
-        context.putImageData(imagedata, 0,0,0,0, this.WIDTH, this.HEIGHT);
-    },
-    _onClickGrayscale: function () {
-        this._putFilterImage("GrayScale");
-    },
-    _onClickBlur : function(){
-        this._putFilterImage("Blur");
-    },
-    _putFilterImage : function(filter){
-        var canvas = this._Canvas;
-        var context = canvas.getContext();
-        var imageData = context.getImageData(0,0,canvas.getCanvasWidth(), canvas.getCanvasHeight());
-        var filterName = PhotoEditor.Filters[filter];
-        var filteredImageData = filterName.call(PhotoEditor.Filters,imageData);
-        context.putImageData(filteredImageData, 0,0);
+    _putImageData : function(contextTarget, drawImagedata){
+        contextTarget.putImageData(drawImagedata, 0,0,0,0, this.WIDTH, this.HEIGHT);
     }
-
 };

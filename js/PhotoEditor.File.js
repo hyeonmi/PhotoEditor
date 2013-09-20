@@ -1,7 +1,15 @@
-
+/**
+ * 이미지 객체를 담고 있는 배열
+ * @class
+ * @name PhotoEditor.
+ * @namespace
+ * @author heyonmi.kim@nts.com
+ * @version 0.0.1
+ * @since 13. 9. 16
+ * @copyright heyonmi.kim
+ */
 var PhotoEditor = PhotoEditor || {};
-PhotoEditor.File = function(options){
-    $.extend(this, options || {});
+PhotoEditor.File = function(){
     this.init();
 };
 PhotoEditor.File.prototype = {
