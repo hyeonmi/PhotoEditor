@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>flip TEST</title>
 </head>
 <body>
 <div style="border-color: gray;border:1px solid;">
@@ -19,21 +19,20 @@
     var width = 50;
     var height = 100;
     var x1 = 100, y1 = 100;
+    var imgData = null;
     img.src = "img/border-color-icon.png";
-    this.img.onload = function () {
+    img.onload = function () {
+        context.save();
+        context.drawImage(img,0,0,width, height);
+        context.rotate(90 *  Math.PI / 180);
+        context.drawImage(img,0,0,width, -height);
+        context.restore();
+    }
+
+    var imgData = canvas.toDataURL();
         context.save();
         context.translate(width, 0);
         context.scale(-1, 1);
-        context.drawImage(img, 0, 0, width, height);
+        context.drawImage(imgData, 0, 0, width, height);
         context.restore();
-
-        var imgData = canvas.toDataURL();
-        var imgForData = new Image();
-        imgForData.src= imgData;
-        //white 컬러로 채운다
-        context.fillStyle = "#ffffff";
-        context.fillRect(0,0, 300,300);
-        //이미지를 다시 그린다
-        context.drawImage(imgForData, 0, 0, 20, 20, 0, 0, 100, 100);
-    }
 </script>
