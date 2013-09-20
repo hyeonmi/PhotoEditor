@@ -69,7 +69,7 @@
     <option value="400">400</option>
 	<option value="320">320</option>
     </select>
-    <button type="button" class="btn_apply" id="_resize_all_btn">전체적용</button>
+    <!--button type="button" class="btn_apply" id="_resize_all_btn">전체적용</button-->
     <button type="button" class="btn_cancel" id="_undone_btn">실행취소</button>
     <button type="button" class="btn_replay" id="_restore_btn">다시실행</button>
     <button type="button" class="btn_rr" id="_rotate_right_btn"><img src="img/arrow-circle-right-icon.png" alt="오른쪽회전"/></button>
@@ -83,8 +83,8 @@
     <h2 class="blind">편집 툴 모음</h2>
     <ul class="tab_menu">
      <li class="on" id="_effect"><a href="#">효과</a></li>
-     <li class="" id="_tone"><a href="#">보정</a></li>
-     <li class="" id="_text"><a href="#">텍스트</a></li>
+     <!--li class="" id="_tone"><a href="#">보정</a></li-->
+     <!--li class="" id="_text"><a href="#">텍스트</a></li-->
      <!--li class=""><a href="#">그리기</a></li>
      <li class=""><a href="#">액자</a></li>
      <li class=""><a href="#">서명</a></li-->
@@ -159,7 +159,6 @@
  <!-- //container -->
  <!-- footer -->
  <footer>
-     <img id="test" width="100px" height="100px" />
  </footer>
  <!-- //footer -->
 </div>
@@ -178,7 +177,6 @@
      <script type="text/javascript">
         window.onload = function(){
             (function(){
-                var potoEditor = new PhotoEditor();
                 var file = new PhotoEditor.File();
                 var canvasController = new PhotoEditor.Canvas.Controller();
                 var ImgCollection = new PhotoEditor.Image.Collection();
