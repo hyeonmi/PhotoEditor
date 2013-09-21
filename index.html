@@ -11,7 +11,7 @@
  <header>
   <div class="title">
    <h1>PhotoEditor</h1>
-   <p>한 장당 10MB 1회 50MB까지 사진 올리기 가능(JPG, GIF, PNG, BMP)</p>
+   <p>한 장당 5MB 최대 10장 까지 사진 선택 가능 합니다.</p>
   </div>
      <style type="text/css">
          .thumb ul li img{width:100px;height:75px}
@@ -24,8 +24,8 @@
   <!-- content -->
   <div class="thumb">
    <ul>
-    <li class=""><img src="img/img.jpg"></li>
-    <li class="image"></li>
+    <li class=""><img src="img/hb1.png"></li>
+    <li class=""></li>
     <li class=""></li>
     <li class=""></li>
     <li class=""></li>
@@ -37,11 +37,9 @@
   <!-- //content -->
   <!-- content -->
  <div class="content">
-     <div id="rubberband" style="border: 1px solid #00ff00; position:absolute; cursor: crosshair;z-index:100"></div>
+     <div id="rubberband" style="display:none;border: 1px solid #00ff00; position:absolute; cursor: crosshair;z-index:100"></div>
      <div class="canvas">
-        <!--img src="img/img.jpg" width="680px" height="690px"-->
-        <!-- 4:3 비율이 디지털 사진기 비율-->
-        <canvas id="canvas" width="680px" height="510px" style="background-color: #fff">
+        <canvas id="canvas" width="400px" height="300px" style="background-color: #fff">
         Your browser does not support HTML5 Canvas
         </canvas>
     </div>
@@ -53,7 +51,7 @@
     <button type="button" class="btn_add" id="add_photo">사진 추가</button>
     <input type="file" id="file_upload" class="blind" multiple="multiple" >
     <button type="button" class="btn_delete">모두 삭제</button>
-    <button type="button" class="btn_save">저장하기</button>
+    <button type="button" class="btn_save">다운받기</button>
    </section>
    <section class="tool_area">
     <h2 class="blind">편집 버튼 모음</h2>
@@ -163,24 +161,20 @@
  <!-- //footer -->
 </div>
     <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.File.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.Controller.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.Flip.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Canvas.Rotate.js"></script>
+    <script type="text/javascript" src="js/PhotoEditor.Edit.Crop.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Image.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Image.Collection.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Filters.js"></script>
     <script type="text/javascript" src="js/PhotoEditor.Effect.js"></script>
      <script type="text/javascript">
         window.onload = function(){
             (function(){
-                var file = new PhotoEditor.File();
                 var canvasController = new PhotoEditor.Canvas.Controller();
-                var ImgCollection = new PhotoEditor.Image.Collection();
-                var thumbnail = new PhotoEditor.Thumbnail();
             })();
         }
     </script>

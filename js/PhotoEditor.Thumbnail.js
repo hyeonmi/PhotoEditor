@@ -18,15 +18,36 @@ PhotoEditor.Thumbnail.prototype = {
         this._setElement();
         this._attachEvent();
         this.index = 0;
+        this._images = [];
     },
     _setElement: function () {
         this.waThumbnail = $(".thumb ul li");
     },
     _attachEvent: function () {
-        this.waThumbnail.on("click", "img",$.proxy(this._onClickThumbnail, this));
-        $(document).on("image.created", $.proxy(this._setFileToThumbnail, this));
+
     },
-    _setFileToThumbnail: function (event, images) {
+    createImage : function(files){
+        var fileCount = files.length;
+        for (var fi = 0; fi < fileCount; fi += 1) {
+            var file = files[fi];
+            var reader = new FileReader();
+            reader.onloadend = $.proxy(this._onloadendImage, this, fi);
+            reader.readAsDataURL(file);
+        }
+    },
+    _onloadendImage : function(index, progressEvent){
+        var img = new PhotoEditor.Image({"key" : index,
+                                         "fileSrc" : progressEvent.target.result,
+                                         "callback" : $.proxy(this._callbackCreateImage, this)});
+    },
+    _callbackCreateImage : function(image){
+        this._addImage(image);
+        this._setFileToThumbnail(image);
+    },
+    _addImage : function(image){
+        this._images.push(image);
+    },
+    _setFileToThumbnail: function (images) {
         for(var fi = 0; fi < this.waThumbnail.length; fi +=1){
             var thumnail = $(this.waThumbnail[fi]);
             if(thumnail.find("img").length === 0){
@@ -34,9 +55,5 @@ PhotoEditor.Thumbnail.prototype = {
                 return true;
             }
         }
-    },
-    _onClickThumbnail : function(event){
-        var thumbnail = $(event.currentTarget);
-        $(document).trigger("canvas.drawthumbnail", [thumbnail]);
     }
 };

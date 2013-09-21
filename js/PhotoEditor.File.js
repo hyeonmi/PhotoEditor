@@ -32,11 +32,18 @@ PhotoEditor.File.prototype = {
     _onClickAddFileBtn : function(){
         this._welFileUpload.trigger("click");
     },
-    _onChangeFileUpload : function(e){
-        var files = e.target.files;
-        if(this._validFiles(files)){
-            $(document).trigger("file.change", [files]);
+    _onChangeFileUpload : function(event){
+        if((this.FileUploaodCallback instanceof Function) === false){
+            return false;
         }
+
+        var files = event.target.files;
+        if(this._validFiles(files)){
+            this.FileUploaodCallback(files);
+        }
+    },
+    setFileUploadCallback : function(callback){
+        this.FileUploaodCallback = callback;
     },
     _validFiles: function (files) {
         var fileErrorType = this._checkFileError(files);
