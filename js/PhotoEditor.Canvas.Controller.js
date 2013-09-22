@@ -16,19 +16,20 @@ PhotoEditor.Canvas.Controller = function (options) {
 };
 PhotoEditor.Canvas.Controller.prototype = {
     init: function () {
+        this._createInstance();
+        this._setElement();
+        this._attachEvnet();
+    },
+    _createInstance: function () {
         this._Canvas = new PhotoEditor.Canvas();
         this._Effect = new PhotoEditor.Effect();
         this._File = new PhotoEditor.File();
         this._Thumbnail = new PhotoEditor.Thumbnail();
         this._File.setFileUploadCallback($.proxy(this._Thumbnail.createImage, this._Thumbnail));
         this._Crop = new PhotoEditor.Edit.Crop();
-
-        this._setElement();
-        this._attachEvnet();
-
-
     },
     _setElement: function () {
+        this._allDelete = $(".btn_delete");
         this._resizeSel = $("#_resize_slt");
         this._undoneBtn = $("#_undone_btn");
         this._resotreBtn = $("#_restore_btn");
@@ -36,25 +37,25 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._rotateLeftBtn = $("#_rotate_left_btn");
         this._flipVtc = $("#_flip_vtc");
         this._flipHrz = $("#_flip_hrz");
-
         this._cropBtn = $("#_crop_btn");
         this._isDrag = false;
         this._isCrop = false;
-
     },
     _attachEvnet: function () {
-
+        /** Thumbnail */
+        $(".thumb ul li").on("click", "img",$.proxy(this._onClickThumbnail, this));
+        /** Edit Button */
         this._resizeSel.on("change", $.proxy(this._onChangeResizeSel, this));
         this._rotateRightBtn.on("click", $.proxy(this._onClickClockRotateBtn, this));
         this._rotateLeftBtn.on("click", $.proxy(this._onClickUnClockRotateBtn, this));
         this._flipHrz.on("click", $.proxy(this._onClickFlipHrzBtn, this));
         this._flipVtc.on("click", $.proxy(this._onClickFlipVtcBtn, this));
-
         this._cropBtn.on("click", $.proxy(this._onClickCropBtn, this));
+        /** Crop event */
         this._Canvas.getCanvasElement().on("mousedown", $.proxy(this._onMouseDownCanvas, this));
         $(window).on("mousemove", $.proxy(this._onMouseMoveCanvas, this));
         $(window).on("mouseup", $.proxy(this._onMouseUpCanvas, this));
-
+        /** Filter Canvas */
         $("#_grayscale").on("click", $.proxy(this._onClickFilters, this, "GrayScale"));
         $("#_brightness").on("click", $.proxy(this._onClickFilters, this, "Brightness"));
         $("#_brown").on("click", $.proxy(this._onClickFilters, this, "Brown"));
@@ -64,22 +65,28 @@ PhotoEditor.Canvas.Controller.prototype = {
         $("#_blur").on("click", $.proxy(this._onClickFilters, this, "Blur"));
         $("#_emboss").on("click", $.proxy(this._onClickFilters, this, "Emboss"));
         $("#_sharpen").on("click", $.proxy(this._onClickFilters, this, "Sharpen"));
-
         $(".btn_save").on("click", $.proxy(this._onClickSave, this));
-
-        $(".thumb ul li").on("click", "img",$.proxy(this._onClickThumbnail, this));
+        this._allDelete.on("click", $.proxy(this._onClickAllDelete, this));
+    },
+    _onClickAllDelete : function(){
+        this._Thumbnail.deleteImages();
     },
     _onClickCropBtn: function () {
         this._Crop.setCrop(true);
     },
     _onMouseDownCanvas: function (event) {
+        if(this._Crop.isNotCrop()){
+            return false;
+        }
+        this._setCanvasMinMax();
+        this._Crop.startCrop(event);
+    },
+    _setCanvasMinMax: function () {
         var canvasBox = this._Canvas.getCanvas().getBoundingClientRect();
         this._canvasMinX = canvasBox.left;
         this._canvasMinY = canvasBox.top;
         this._canvasMaxX = this._Canvas.getCanvasWidth() + this._canvasMinX;
         this._canvasMaxY = this._Canvas.getCanvasHeight() + this._canvasMinY;
-
-        this._Crop.startCrop(event);
     },
     _onMouseMoveCanvas: function (event) {
         if(this._Crop.isNotCrop()){
@@ -101,7 +108,6 @@ PhotoEditor.Canvas.Controller.prototype = {
             event.clientY = this._canvasMinY;
         }
 
-
         this._Crop.cropping(event);
     },
     _onMouseUpCanvas: function (event) {
@@ -113,31 +119,22 @@ PhotoEditor.Canvas.Controller.prototype = {
             rubberbandRect = this._Crop.getRubberbandRect(),
             canvas = this._Canvas,
             context = canvas.getContext();
-//        var maxWidthPosition = canvasBox.left + this._Canvas.getCanvasWidth(),
-//            maxHeightPostion = canvasBox.height + this._Canvas.getCanvasHeight();
-//        var maxRectWidthPostion = rubberbandRect.left + rubberbandRect.width,
-//            maxRectHeightPostion = rubberbandRect.top + rubberbandRect.height;
-//        var minWidth = Math.min(maxRectWidthPostion, maxWidthPosition),
-//            minHeight = Math.min(maxRectHeightPostion, maxHeightPostion);
-//        var resultWidth = Math.abs(rubberbandRect.left - minWidth),
-//            resultHeight = Math.abs(rubberbandRect.top - minHeight);
-        var resultWidth = rubberbandRect.width,
-            resultHeight = rubberbandRect.height;
+        var sourceWidth = rubberbandRect.width,
+            sourceHeight = rubberbandRect.height,
+            sourceX = rubberbandRect.left - canvasBox.left,
+            sourceY = rubberbandRect.top - canvasBox.top;
         canvas.save();
-        canvas.setCanvasWidth(resultWidth);
-        canvas.setCanvasHeight(resultHeight);
+        canvas.setCanvasWidth(sourceWidth);
+        canvas.setCanvasHeight(sourceHeight);
         context.drawImage(this._CanvasImage.getImage(),
-            rubberbandRect.left - canvasBox.left,
-            rubberbandRect.top - canvasBox.top,
-            resultWidth,
-            resultHeight,
-            0, 0,
-            resultWidth,
-            resultHeight);
-        this.saveCanvasImage(resultWidth, resultHeight);
+            sourceX, sourceY, sourceWidth, sourceHeight,
+            0, 0, sourceWidth, sourceHeight);
+        this._saveCanvasImage();
+        this._setChangeCanvasImageSize(sourceWidth, sourceHeight);
         canvas.restore();
 
         this._Crop.stopCrop(event);
+        this._Crop.setCrop(false);
     },
     /**
      * 썸네일 클릭시 호출되는 이벤트
@@ -178,7 +175,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         var filterName = PhotoEditor.Filters[filter];
         var filteredImageData = filterName.call(PhotoEditor.Filters, imageData);
         context.putImageData(filteredImageData, 0, 0);
-        this.saveCanvasImage();
+        this._saveCanvasImage();
     },
 
     /** 가로 크기 변경 */
@@ -198,7 +195,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         Canvas.setCanvasWidth(parseWidth);
         Canvas.setCanvasHeight(parseHeight);
         Context.drawImage(CanvasImage.getImage(), 0, 0, parseWidth, parseHeight);
-        this.saveCanvasImage();
+        this._saveCanvasImage();
     },
     /**
      * 썸네일 클릭시 호출되는 이벤트
@@ -213,39 +210,42 @@ PhotoEditor.Canvas.Controller.prototype = {
     },
     _loadedImage: function () {
         this._Canvas.drawImage(this._CanvasImage);
-        this.saveCanvasImage();
+        this._saveCanvasImage();
         this._Effect.onLoadFilter(this._CanvasImage);
     },
     /** rotate */
     _onClickClockRotateBtn: function () {
         var changeArea = PhotoEditor.Canvas.Rotate(this._Canvas, this._CanvasImage, 90);
-        this.saveCanvasImage(changeArea.changeWidth, changeArea.changeHeight);
+        this._saveCanvasImage();
+        this._setChangeCanvasImageSize(changeArea.changeWidth, changeArea.changeHeight);
     },
 
     _onClickUnClockRotateBtn: function () {
         var changeArea = PhotoEditor.Canvas.Rotate(this._Canvas, this._CanvasImage, -90);
-        this.saveCanvasImage(changeArea.changeWidth, changeArea.changeHeight);
+        this._saveCanvasImage();
+        this._setChangeCanvasImageSize(changeArea.changeWidth, changeArea.changeHeight);
 
     },
     /** flip */
     _onClickFlipHrzBtn: function () {
         PhotoEditor.Canvas.Flip(this._Canvas, this._CanvasImage, "Horizon");
-        this.saveCanvasImage();
+        this._saveCanvasImage();
     },
     _onClickFlipVtcBtn: function () {
         PhotoEditor.Canvas.Flip(this._Canvas, this._CanvasImage, "Verticalty");
-        this.saveCanvasImage();
+        this._saveCanvasImage();
     },
     /**
      * 현재 캔버스의 이미지를 저장한다
      * @param {number} changeWidth
      * @param {number} changeHeight
      */
-    saveCanvasImage: function (changeWidth, changeHeight) {
+    _saveCanvasImage: function () {
         var imageData = this._Canvas.getCanvas().toDataURL();
         this._CanvasImage.setCallback(null);
         this._CanvasImage.setImageSrc(imageData);
-
+    },
+    _setChangeCanvasImageSize : function(changeWidth, changeHeight){
         if (isNaN(changeWidth) === false) {
             this._CanvasImage.setWidth(changeWidth);
         }
