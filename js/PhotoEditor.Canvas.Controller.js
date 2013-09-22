@@ -38,6 +38,8 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._flipVtc = $("#_flip_vtc");
         this._flipHrz = $("#_flip_hrz");
         this._cropBtn = $("#_crop_btn");
+        this._imageWidth = $("#_photo_width");
+        this._imageHeight = $("#_photo_height");
         this._isDrag = false;
         this._isCrop = false;
     },
@@ -54,7 +56,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         /** Crop event */
         this._Canvas.getCanvasElement().on("mousedown", $.proxy(this._onMouseDownCanvas, this));
         $(window).on("mousemove", $.proxy(this._onMouseMoveCanvas, this));
-        $(window).on("mouseup", $.proxy(this._onMouseUpCanvas, this));
+        $(".content").on("mouseup", $.proxy(this._onMouseUpCanvas, this));
         /** Filter Canvas */
         $("#_grayscale").on("click", $.proxy(this._onClickFilters, this, "GrayScale"));
         $("#_brightness").on("click", $.proxy(this._onClickFilters, this, "Brightness"));
@@ -72,7 +74,11 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._Thumbnail.deleteImages();
     },
     _onClickCropBtn: function () {
-        this._Crop.setCrop(true);
+        if(this._Crop.isNotCrop()){
+            this._Crop.setCrop(true);
+        }else{
+            this._Crop.setCrop(false);
+        }
     },
     _onMouseDownCanvas: function (event) {
         if(this._Crop.isNotCrop()){
@@ -123,6 +129,7 @@ PhotoEditor.Canvas.Controller.prototype = {
             sourceHeight = rubberbandRect.height,
             sourceX = rubberbandRect.left - canvasBox.left,
             sourceY = rubberbandRect.top - canvasBox.top;
+
         canvas.save();
         canvas.setCanvasWidth(sourceWidth);
         canvas.setCanvasHeight(sourceHeight);
@@ -190,12 +197,13 @@ PhotoEditor.Canvas.Controller.prototype = {
         var imgWidth = CanvasImage.getWidth(),
             imgHeight = CanvasImage.getHeight();
         var parseWidth = parseInt(width, 10),
-            parseHeight = (imgHeight * parseWidth) / imgWidth;
+            parseHeight = Math.floor((imgHeight * parseWidth) / imgWidth);
 
         Canvas.setCanvasWidth(parseWidth);
         Canvas.setCanvasHeight(parseHeight);
         Context.drawImage(CanvasImage.getImage(), 0, 0, parseWidth, parseHeight);
         this._saveCanvasImage();
+        this._setChangeCanvasImageSize(parseWidth, parseHeight);
     },
     /**
      * 썸네일 클릭시 호출되는 이벤트
@@ -207,6 +215,8 @@ PhotoEditor.Canvas.Controller.prototype = {
             "fileSrc": thumbnail[0].src,
             "callback": $.proxy(this._loadedImage, this)
         });
+        this._setChangeCanvasImageSize(this._CanvasImage.getWidth(), this._CanvasImage.getHeight());
+
     },
     _loadedImage: function () {
         this._Canvas.drawImage(this._CanvasImage);
@@ -252,5 +262,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         if (isNaN(changeHeight) === false) {
             this._CanvasImage.setHeight(changeHeight);
         }
+        this._imageWidth.text(changeWidth);
+        this._imageHeight.text(changeHeight);
     }
 };
