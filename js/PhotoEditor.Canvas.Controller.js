@@ -73,9 +73,12 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._Crop.setCrop(true);
     },
     _onMouseDownCanvas: function (event) {
-        if(this._Crop.isNotCrop()){
-            return false;
-        }
+        var canvasBox = this._Canvas.getCanvas().getBoundingClientRect();
+        this._canvasMinX = canvasBox.left;
+        this._canvasMinY = canvasBox.top;
+        this._canvasMaxX = this._Canvas.getCanvasWidth() + this._canvasMinX;
+        this._canvasMaxY = this._Canvas.getCanvasHeight() + this._canvasMinY;
+
         this._Crop.startCrop(event);
     },
     _onMouseMoveCanvas: function (event) {
@@ -85,19 +88,41 @@ PhotoEditor.Canvas.Controller.prototype = {
         if (this._Crop.isNotDrag()) {
             return false;
         }
+
+        if(event.clientX >= this._canvasMaxX){
+            event.clientX = this._canvasMaxX;
+        }else if(event.clientX <= this._canvasMinX){
+            event.clientX = this._canvasMinX;
+        }
+
+        if(event.clientY >= this._canvasMaxY){
+            event.clientY = this._canvasMaxY;
+        }else if(event.clientY <= this._canvasMinY){
+            event.clientY = this._canvasMinY;
+        }
+
+
         this._Crop.cropping(event);
     },
     _onMouseUpCanvas: function (event) {
         if(this._Crop.isNotCrop()){
             return false;
         }
+
         var canvasBox = this._Canvas.getCanvas().getBoundingClientRect(),
             rubberbandRect = this._Crop.getRubberbandRect(),
             canvas = this._Canvas,
             context = canvas.getContext();
-        var resultWidth = rubberbandRect.width;
-        var resultHeight = rubberbandRect.height;
-
+//        var maxWidthPosition = canvasBox.left + this._Canvas.getCanvasWidth(),
+//            maxHeightPostion = canvasBox.height + this._Canvas.getCanvasHeight();
+//        var maxRectWidthPostion = rubberbandRect.left + rubberbandRect.width,
+//            maxRectHeightPostion = rubberbandRect.top + rubberbandRect.height;
+//        var minWidth = Math.min(maxRectWidthPostion, maxWidthPosition),
+//            minHeight = Math.min(maxRectHeightPostion, maxHeightPostion);
+//        var resultWidth = Math.abs(rubberbandRect.left - minWidth),
+//            resultHeight = Math.abs(rubberbandRect.top - minHeight);
+        var resultWidth = rubberbandRect.width,
+            resultHeight = rubberbandRect.height;
         canvas.save();
         canvas.setCanvasWidth(resultWidth);
         canvas.setCanvasHeight(resultHeight);

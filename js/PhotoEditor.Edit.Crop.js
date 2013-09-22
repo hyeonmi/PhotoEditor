@@ -48,35 +48,38 @@ PhotoEditor.Edit.Crop.prototype = {
         return this._rubberbandRect;
     },
     _setRubberbandPosition: function (x, y) {
-        this._rubberbandRect.top = y;
-        this._rubberbandRect.left = x;
+            this._rubberbandRect.left = x;
+            this._rubberbandRect.top = y;
+
     },
-    _setRubberbandArea: function (x, y) {
-        this._rubberbandRect.height = Math.abs(this._rubberbandRect.top - y);
-        this._rubberbandRect.width = Math.abs(this._rubberbandRect.left - x);
+    _setRubberbandSize: function (x, y) {
+            this._rubberbandRect.width = Math.abs(x - this._MouseDownPosition.x);
+            this._rubberbandRect.height = Math.abs(y - this._MouseDownPosition.y);
+    },
+    _setMouseDownPosition: function (x, y) {
+        this._MouseDownPosition.x = x;
+        this._MouseDownPosition.y = y;
     },
     startCrop: function (event) {
         this._setRubberbandPosition(event.clientX, event.clientY);
-        this._MouseDownPosition.x = event.clientX;
-        this._MouseDownPosition.y = event.clientY;
-
+        this._setMouseDownPosition(event.clientX, event.clientY);
         event.preventDefault();
         this._moveRubberband();
         this._showRubberband();
         this.setDrag(true);
 
     },
+    considerPosition: function (event) {
+        var positionX = event.clientX < this._MouseDownPosition.x ? event.clientX : this._MouseDownPosition.x,
+            positionY = event.clientY < this._MouseDownPosition.y ? event.clientY : this._MouseDownPosition.y;
+        return {positionX: positionX, positionY: positionY};
+    },
     cropping: function (event) {
         event.preventDefault();
 
-        this._setRubberbandArea(event.clientX, event.clientY);
-        var positionX = event.clientX < this._MouseDownPosition.x ? event.clientX : this._MouseDownPosition.x,
-            positionY = event.clientY < this._MouseDownPosition.y ? event.clientY : this._MouseDownPosition.y;
-        this._setRubberbandPosition(positionX,positionY);
-
-        this._rubberbandRect.width = Math.abs(event.clientX - this._MouseDownPosition.x);
-        this._rubberbandRect.height = Math.abs(event.clientY - this._MouseDownPosition.y);
-
+        var startPostion = this.considerPosition(event);
+        this._setRubberbandPosition(startPostion.positionX, startPostion.positionY);
+        this._setRubberbandSize(event.clientX, event.clientY);
         this._moveRubberband();
         this._resizeRubberband();
     },
@@ -96,6 +99,14 @@ PhotoEditor.Edit.Crop.prototype = {
             left: this._rubberbandRect.left
         });
     },
+//    setCanvasMaxArea : function(canvasMaxX, canvasMaxY){
+//        this._canvasMaxX = canvasMaxX;
+//        this._canvasMaxY = canvasMaxY;
+//    },
+//    setCanvasMinArea : function(canvasMinX, canvasMinY){
+//        this._canvasMinX = canvasMinX;
+//        this._canvasMinY = canvasMinY;
+//    },
     _resizeRubberband: function () {
         this._rubberband.css({
             width: this._rubberbandRect.width,
