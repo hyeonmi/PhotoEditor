@@ -99,14 +99,6 @@ PhotoEditor.Edit.Crop.prototype = {
             left: this._rubberbandRect.left
         });
     },
-//    setCanvasMaxArea : function(canvasMaxX, canvasMaxY){
-//        this._canvasMaxX = canvasMaxX;
-//        this._canvasMaxY = canvasMaxY;
-//    },
-//    setCanvasMinArea : function(canvasMinX, canvasMinY){
-//        this._canvasMinX = canvasMinX;
-//        this._canvasMinY = canvasMinY;
-//    },
     _resizeRubberband: function () {
         this._rubberband.css({
             width: this._rubberbandRect.width,
