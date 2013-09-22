@@ -8,8 +8,8 @@
  * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
-PhotoEditor.Canvas = PhotoEditor.Canvas || {};
-PhotoEditor.Canvas.Rotate = function(Canvas, Image, degrees){
+PhotoEditor.Edit = PhotoEditor.Edit || {};
+PhotoEditor.Edit.Rotate = function(Canvas, Image, degrees){
     var canvas = Canvas,
         context = canvas.getContext();
     var photoWidth = Image.getWidth(),

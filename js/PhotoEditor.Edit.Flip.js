@@ -8,8 +8,8 @@
  * @copyright heyonmi.kim
  */
 var PhotoEditor = PhotoEditor || {};
-PhotoEditor.Canvas = PhotoEditor.Canvas || {};
-PhotoEditor.Canvas.Flip = function(Canvas, Image, direction){
+PhotoEditor.Edit = PhotoEditor.Edit || {};
+PhotoEditor.Edit.Flip = function(Canvas, Image, direction){
         var canvas = Canvas;
         var context = canvas.getContext();
         var photoWidth = Image.getWidth(),

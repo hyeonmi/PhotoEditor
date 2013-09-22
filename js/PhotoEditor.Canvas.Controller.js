@@ -225,24 +225,24 @@ PhotoEditor.Canvas.Controller.prototype = {
     },
     /** rotate */
     _onClickClockRotateBtn: function () {
-        var changeArea = PhotoEditor.Canvas.Rotate(this._Canvas, this._CanvasImage, 90);
+        var changeArea = PhotoEditor.Edit.Rotate(this._Canvas, this._CanvasImage, 90);
         this._saveCanvasImage();
         this._setChangeCanvasImageSize(changeArea.changeWidth, changeArea.changeHeight);
     },
 
     _onClickUnClockRotateBtn: function () {
-        var changeArea = PhotoEditor.Canvas.Rotate(this._Canvas, this._CanvasImage, -90);
+        var changeArea = PhotoEditor.Edit.Rotate(this._Canvas, this._CanvasImage, -90);
         this._saveCanvasImage();
         this._setChangeCanvasImageSize(changeArea.changeWidth, changeArea.changeHeight);
 
     },
     /** flip */
     _onClickFlipHrzBtn: function () {
-        PhotoEditor.Canvas.Flip(this._Canvas, this._CanvasImage, "Horizon");
+        PhotoEditor.Edit.Flip(this._Canvas, this._CanvasImage, "Horizon");
         this._saveCanvasImage();
     },
     _onClickFlipVtcBtn: function () {
-        PhotoEditor.Canvas.Flip(this._Canvas, this._CanvasImage, "Verticalty");
+        PhotoEditor.Edit.Flip(this._Canvas, this._CanvasImage, "Verticalty");
         this._saveCanvasImage();
     },
     /**

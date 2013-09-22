@@ -1,5 +1,5 @@
 /**
- * 설명을 작성하세요
+ * 크롭 이벤트
  * @names nts.PhotoEditor
  * @namespace
  * @author heyonmi.kim@nts.com
