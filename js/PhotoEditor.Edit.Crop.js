@@ -21,6 +21,7 @@ PhotoEditor.Edit.Crop.prototype = {
         this._isDrag = false;
         this._isCrop = false;
         this._rubberband = $("#rubberband");
+        this._wrapper = $(".wrap");
         this._MouseDownPosition = { x : 0, y : 0};
     },
     setCrop : function(flag){
@@ -67,7 +68,7 @@ PhotoEditor.Edit.Crop.prototype = {
         this._moveRubberband();
         this._showRubberband();
         this.setDrag(true);
-
+        this._wrapper.css("cursor", "crosshair");
     },
     considerPosition: function (event) {
         var positionX = event.clientX < this._MouseDownPosition.x ? event.clientX : this._MouseDownPosition.x,
@@ -91,11 +92,13 @@ PhotoEditor.Edit.Crop.prototype = {
         this._resizeRubberband();
         this.setDrag(false);
         this.setCrop(false);
+        this._wrapper.css("cursor", "auto");
 
     },
     _moveRubberband: function () {
+        var scrollTop = $(document).scrollTop();
         this._rubberband.css({
-            top: this._rubberbandRect.top,
+            top: this._rubberbandRect.top + scrollTop,
             left: this._rubberbandRect.left
         });
     },
