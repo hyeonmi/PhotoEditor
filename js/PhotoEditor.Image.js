@@ -23,10 +23,10 @@ PhotoEditor.Image.prototype = {
         this._image.src = this.fileSrc;
     },
     _attachEvent : function(){
-        $(this._image).on("load", $.proxy(this._loadedImage, this));
+        $(this._image).on("load", $.proxy(this._loadImage, this));
     },
-    _loadedImage : function(){
-        if(this._callback !==  null){
+    _loadImage : function(){
+        if(this._callback instanceof Function){
             this._callback(this._image);
         }
         return this;

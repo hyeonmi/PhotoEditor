@@ -33,6 +33,7 @@ PhotoEditor.Canvas.prototype = {
     getContext: function () {
         return this._context;
     },
+    //TODO 썸네일 처음 클릭시 이미지 원래 사이즈로 보여준다
     drawImage: function (Image) {
         var photo = Image.getImage();
         var photoWidth = Image.getWidth(),

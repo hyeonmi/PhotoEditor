@@ -25,10 +25,12 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._Effect = new PhotoEditor.Effect();
         this._File = new PhotoEditor.File();
         this._Thumbnail = new PhotoEditor.Thumbnail();
-        this._File.setFileUploadCallback($.proxy(this._Thumbnail.createImage, this._Thumbnail));
         this._Crop = new PhotoEditor.Edit.Crop();
     },
     _setElement: function () {
+        this._welAddFileBtn = $("#add_photo");
+        this._welFileUpload = $("#file_upload");
+
         this._allDelete = $(".btn_delete");
         this._resizeSel = $("#_resize_slt");
         this._undoneBtn = $("#_undone_btn");
@@ -42,8 +44,12 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._imageHeight = $("#_photo_height");
         this._isDrag = false;
         this._isCrop = false;
+        this._CanvasImage = null;
     },
     _attachEvnet: function () {
+        this._welAddFileBtn.on("click", $.proxy(this._onClickAddFileBtn, this));
+        this._welFileUpload.on("change", $.proxy(this._onChangeFileUpload, this));
+
         /** Thumbnail */
         $(".thumb ul li").on("click", "img",$.proxy(this._onClickThumbnail, this));
         /** Edit Button */
@@ -70,9 +76,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         $(".btn_save").on("click", $.proxy(this._onClickSave, this));
         this._allDelete.on("click", $.proxy(this._onClickAllDelete, this));
     },
-    _onClickAllDelete : function(){
-        this._Thumbnail.deleteImages();
-    },
+    /** Crop */
     _onClickCropBtn: function () {
         if(this._Crop.isNotCrop()){
             this._Crop.setCrop(true);
@@ -153,16 +157,6 @@ PhotoEditor.Canvas.Controller.prototype = {
         this.createCanvasImageBy(thumbnail);
     },
     /**
-     * 편집한 이미지 다운받기
-     * @private
-     */
-    _onClickSave : function(){
-        var strDownloadMime = "image/octet-stream";
-        var strMime = "image/jpeg";
-        var strData = this._Canvas.getCanvas().toDataURL("image/jpeg");
-        document.location.href = strData.replace(strMime, strDownloadMime);
-    },
-    /**
      * 효과탭의 필터 미리 보기 클릭시 호출되는 이벤트
      * @param filterName
      * @private
@@ -184,7 +178,6 @@ PhotoEditor.Canvas.Controller.prototype = {
         context.putImageData(filteredImageData, 0, 0);
         this._saveCanvasImage();
     },
-
     /** 가로 크기 변경 */
     _onChangeResizeSel: function () {
         var width = this._resizeSel.children(":selected").text();
@@ -205,20 +198,61 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._saveCanvasImage();
         this._setChangeCanvasImageSize(parseWidth, parseHeight);
     },
+
     /**
-     * 썸네일 클릭시 호출되는 이벤트
-     * @param event
+     * image download
+     * @private
+     */
+    _onClickSave : function(){
+        if(this._CanvasImage === null){
+            alert("사진을 선택해주세요.");
+            return false;
+        }
+
+        var strDownloadMime = "image/octet-stream";
+        var strMime = "image/jpeg";
+        var strData = this._Canvas.getCanvas().toDataURL("image/jpeg",1.0);
+        document.location.href = strData.replace(strMime, strDownloadMime);
+    },
+    /**
+     * thumbnail all delete
+     * @private
+     */
+    _onClickAllDelete : function(){
+        if(this._Thumbnail.isEmptyThumbnail()){
+            alert("삭제할 사진이 없습니다.");
+            return false;
+        }
+        this._Thumbnail.deleteImages();
+        this._Canvas.clear();
+        this._CanvasImage = null;
+    },
+    /** file upload*/
+    _onClickAddFileBtn : function(){
+        this._welFileUpload.trigger("click");
+    },
+    _onChangeFileUpload : function(event){
+        var files = event.target.files;
+        if(this._File.validFiles(files)){
+            this._Thumbnail.createImage(files);
+        }
+    },
+    /**
+     * 썸네일 클릭시 캔버스 이미지 객체를 만든다
      * @param thumbnail
      */
     createCanvasImageBy: function (thumbnail) {
         this._CanvasImage = new PhotoEditor.Image({
             "fileSrc": thumbnail[0].src,
-            "callback": $.proxy(this._loadedImage, this)
+            "callback": $.proxy(this._loadImage, this)
         });
         this._setChangeCanvasImageSize(this._CanvasImage.getWidth(), this._CanvasImage.getHeight());
-
     },
-    _loadedImage: function () {
+    /**
+     * 캔버스의 이미지가 로드됐을때 호출된다
+     * @private
+     */
+    _loadImage: function () {
         this._Canvas.drawImage(this._CanvasImage);
         this._saveCanvasImage();
         this._Effect.onLoadFilter(this._CanvasImage);
@@ -234,7 +268,6 @@ PhotoEditor.Canvas.Controller.prototype = {
         var changeArea = PhotoEditor.Edit.Rotate(this._Canvas, this._CanvasImage, -90);
         this._saveCanvasImage();
         this._setChangeCanvasImageSize(changeArea.changeWidth, changeArea.changeHeight);
-
     },
     /** flip */
     _onClickFlipHrzBtn: function () {
@@ -255,6 +288,12 @@ PhotoEditor.Canvas.Controller.prototype = {
         this._CanvasImage.setCallback(null);
         this._CanvasImage.setImageSrc(imageData);
     },
+    /**
+     * 현재 캔버스에 넓이와 높이를 적용시킨다
+     * @param {number} changeWidth
+     * @param {number} changeHeight
+     * @private
+     */
     _setChangeCanvasImageSize : function(changeWidth, changeHeight){
         if (isNaN(changeWidth) === false) {
             this._CanvasImage.setWidth(changeWidth);
