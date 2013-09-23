@@ -72,9 +72,11 @@ PhotoEditor.Thumbnail.prototype = {
     _getThumbnailImageCount: function () {
         return this._waThumbnail.find("img").length;
     },
-    isAddThumbnail : function(){
-
-        return this._thumbnailCount - this._getThumbnailImageCount() > 0;
+    _getThumbnailCount: function () {
+        return this._thumbnailCount;
+    },
+    isNotAddThumbnail : function(){
+        return this._getThumbnailCount() - this._getThumbnailImageCount() <= 0;
     },
     isEmptyThumbnail : function(){
         return this._getThumbnailImageCount() <= 0;
@@ -83,7 +85,7 @@ PhotoEditor.Thumbnail.prototype = {
         this._images.push(image);
     },
     _setFileToThumbnail: function (images) {
-        for(var fi = 0; fi < this._thumbnailCount; fi +=1){
+        for(var fi = 0; fi < this._getThumbnailCount(); fi +=1){
             var thumbnail = $(this._waThumbnail[fi]);
             if(thumbnail.find("img").length === 0){
                 thumbnail.append(images);
