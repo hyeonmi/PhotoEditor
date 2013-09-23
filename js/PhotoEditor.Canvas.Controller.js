@@ -62,7 +62,7 @@ PhotoEditor.Canvas.Controller.prototype = {
         /** Crop event */
         this._Canvas.getCanvasElement().on("mousedown", $.proxy(this._onMouseDownCanvas, this));
         $(window).on("mousemove", $.proxy(this._onMouseMoveCanvas, this));
-        $(".content").on("mouseup", $.proxy(this._onMouseUpCanvas, this));
+        $(document).on("mouseup", $.proxy(this._onMouseUpCanvas, this));
         /** Filter Canvas */
         $("#_grayscale").on("click", $.proxy(this._onClickFilters, this, "GrayScale"));
         $("#_brightness").on("click", $.proxy(this._onClickFilters, this, "Brightness"));
@@ -125,6 +125,7 @@ PhotoEditor.Canvas.Controller.prototype = {
             return false;
         }
 
+
         var canvasBox = this._Canvas.getCanvas().getBoundingClientRect(),
             rubberbandRect = this._Crop.getRubberbandRect(),
             canvas = this._Canvas,
@@ -133,6 +134,10 @@ PhotoEditor.Canvas.Controller.prototype = {
             sourceHeight = rubberbandRect.height,
             sourceX = rubberbandRect.left - canvasBox.left,
             sourceY = rubberbandRect.top - canvasBox.top;
+
+        if(sourceWidth < 10 || sourceHeight < 10){
+            return false;
+        }
 
         canvas.save();
         canvas.setCanvasWidth(sourceWidth);
@@ -229,6 +234,10 @@ PhotoEditor.Canvas.Controller.prototype = {
     },
     /** file upload*/
     _onClickAddFileBtn : function(){
+        if(this._Thumbnail.isNotAddThumbnail()){
+            alert("더 이상 사진을 추가할 수 없습니다.");
+            return false;
+        }
         this._welFileUpload.trigger("click");
     },
     _onChangeFileUpload : function(event){
