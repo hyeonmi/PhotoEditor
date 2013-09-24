@@ -14,6 +14,7 @@ PhotoEditor.Edit.Flip = function(Canvas, Image, direction){
         var context = canvas.getContext();
         var photoWidth = Image.getWidth(),
             photoHeight = Image.getHeight();
+        //이전의 상태값을 저장
         canvas.save();
         if(direction === "Verticalty"){
             context.translate(photoWidth, 0);
@@ -23,6 +24,6 @@ PhotoEditor.Edit.Flip = function(Canvas, Image, direction){
             context.scale(1, -1);
         }
 
-        context.drawImage(Image.getImage(), 0, 0, photoWidth, photoHeight, 0, 0, photoWidth, photoHeight);
+        context.drawImage(Image.getImage(),  0, 0);
         canvas.restore();
 }

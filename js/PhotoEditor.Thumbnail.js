@@ -21,24 +21,24 @@ PhotoEditor.Thumbnail.prototype = {
         this._images = [];
     },
     _setElement: function () {
-        this._waThumbnail = $(".thumb ul li");
+        this._thumbnails = $(".thumb ul li");
         this._progress = document.getElementById("progress");
         this._progressArea = $(".progress_area");
-        this._thumbnailCount = this._waThumbnail.length;
+        this._thumbnailCount = this._thumbnails.length;
     },
     _attachEvent: function () {
 
     },
     createImage : function(files){
         var fileCount = files.length;
+        var reader = new FileReader();
+        reader.onloadstart = $.proxy(this._onloadstartImage, this);
+        reader.onprogress = $.proxy(this._onprogressImage, this);
+        reader.onload = $.proxy(this._onloadImage, this);
+        reader.onerror = $.proxy(this._onerrorImage, this);
+        reader.onloadend = $.proxy(this._onloadendImage, this);
         for (var fi = 0; fi < fileCount; fi += 1) {
             var file = files[fi];
-            var reader = new FileReader();
-            reader.onloadstart = $.proxy(this._onloadstartImage, this);
-            reader.onprogress = $.proxy(this._onprogressImage, this);
-            reader.onload = $.proxy(this._onloadImage, this, fi);
-            reader.onerror = $.proxy(this._onerrorImage, this);
-            reader.onloadend = $.proxy(this._onloadendImage, this);
             reader.readAsDataURL(file);
         }
     },
@@ -55,10 +55,12 @@ PhotoEditor.Thumbnail.prototype = {
             this._progress.value = progressEvent.loaded;
         }
     },
-    _onloadImage : function(index, progressEvent){
-        var img = new PhotoEditor.Image({"key" : index,
+    _onloadImage : function(progressEvent){
+        //dataURL
+        var image = new PhotoEditor.Image({
                                          "fileSrc" : progressEvent.target.result,
-                                         "callback" : $.proxy(this._callbackCreateImage, this)});
+                                         "callback" : $.proxy(this._callbackCreateImage, this)
+                                        });
     },
     _onerrorImage : function(progressEvent){
         console.log(progressEvent.target.error);
@@ -67,10 +69,10 @@ PhotoEditor.Thumbnail.prototype = {
         this._hideProgress();
     },
     deleteImages : function(){
-        this._waThumbnail.find("img").remove();
+        this._thumbnails.find("img").remove();
     },
     _getThumbnailImageCount: function () {
-        return this._waThumbnail.find("img").length;
+        return this._thumbnails.find("img").length;
     },
     _getThumbnailCount: function () {
         return this._thumbnailCount;
@@ -86,7 +88,7 @@ PhotoEditor.Thumbnail.prototype = {
     },
     _setFileToThumbnail: function (images) {
         for(var fi = 0; fi < this._getThumbnailCount(); fi +=1){
-            var thumbnail = $(this._waThumbnail[fi]);
+            var thumbnail = $(this._thumbnails[fi]);
             if(thumbnail.find("img").length === 0){
                 thumbnail.append(images);
                 return true;

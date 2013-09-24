@@ -17,7 +17,6 @@ PhotoEditor.Image = function (options) {
 PhotoEditor.Image.prototype = {
     init : function(){
         this._callback = this.callback;
-        this._key = this.key;
         this._image = new Image();
         this._attachEvent();
         this._image.src = this.fileSrc;

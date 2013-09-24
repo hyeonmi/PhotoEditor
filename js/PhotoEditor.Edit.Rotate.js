@@ -25,12 +25,11 @@ PhotoEditor.Edit.Rotate = function(Canvas, Image, degrees){
     } else if (degrees === -90) {
         changeX = photoWidth * (-1);
     }
+    //캔버스의 크기 변경시 값이 초기화 되기때문에 상태를 저장하지 않는다
     //canvas width, height을 변경했을 경우 상태값은 저장되지 않아야함
     canvas.setCanvasWidth(changeWidth);
     canvas.setCanvasHeight(changeHeight);
-    canvas.save();
     context.rotate(angleInRadians);
-    context.drawImage(Image.getImage(), changeX, changeY, photoWidth, photoHeight);
-    canvas.restore();
+    context.drawImage(Image.getImage(), changeX, changeY);
     return {changeWidth : changeWidth,  changeHeight : changeHeight};
 };
