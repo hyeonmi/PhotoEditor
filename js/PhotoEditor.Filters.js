@@ -27,11 +27,7 @@ PhotoEditor.Filters = {
         return copyImageData;
     },
 
-    Convolve : function(imageData, matrix, divisor, offset) {
-        if (!divisor) {
-            divisor = matrix.reduce(function(a, b) {return a + b;}) || 1; // sum
-        }
-
+    Convolve : function(imageData, matrix, offset) {
         var olddata = this.copyImageData(imageData);
         var oldpx = olddata.data;
         var newdata = this.getContext().createImageData(olddata);
@@ -59,7 +55,7 @@ PhotoEditor.Filters = {
             for (var j = 0; j < 9; j++) {
                 res += these[j] * matrix[j];
             }
-            res /= divisor;
+
             if (offset) {
                 res += offset;
             }
@@ -137,26 +133,26 @@ PhotoEditor.Filters = {
     },
     Blur : function(imageData){
         var matrix = [
-            1,  2,  1,
-            2,  4,  2,
-            1,  2,  1
+            1/9, 1/9,1/9,
+            1/9, 1/9,1/9,
+            1/9, 1/9,1/9
         ];
-        return this.Convolve(imageData, matrix);
+        return this.Convolve(imageData, matrix, 1);
     },
     Sharpen : function(imageData){
         var matrix = [
-            -1, -1, -1,
-            -1,  9, -1,
-            -1, -1, -1
+            0, -1,  0,
+            -1, 5, -1,
+            0, -1,  0
         ];
-        return this.Convolve(imageData, matrix);
+        return this.Convolve(imageData, matrix,1);
     },
     Emboss : function(imageData){
         var matrix = [
-            1,  1, -1,
-            1,  3, -1,
-            1, -1, -1
+            1, 1, 1,
+            1, 0.8, -1,
+            -1, -1, -1
         ];
-        return this.Convolve(imageData, matrix);
+        return this.Convolve(imageData, matrix,1);
     }
 };
