@@ -14,7 +14,7 @@ PhotoEditor.Canvas = function (options) {
     this.init();
 };
 PhotoEditor.Canvas.prototype = {
-    canvasDefaultWidth: 680,
+    canvasDefaultWidth: 800,
     canvasDefaultHeight: 510,
     init: function () {
         this._setElement();
@@ -33,7 +33,6 @@ PhotoEditor.Canvas.prototype = {
     getContext: function () {
         return this._context;
     },
-    //TODO 썸네일 처음 클릭시 이미지 원래 사이즈로 보여준다
     drawImage: function (Image) {
         var photo = Image.getImage();
         var photoWidth = Image.getWidth(),
@@ -54,11 +53,7 @@ PhotoEditor.Canvas.prototype = {
         if(this.canvasDefaultWidth >= photoWidth && this.canvasDefaultHeight >= photoHeight){
             return percent;
         }
-        if (photoWidth >= photoHeight) {
-            percent = Math.min(this.canvasDefaultWidth, photoWidth) / Math.max(this.canvasDefaultWidth, photoWidth);
-        } else {
-            percent = Math.min(this.canvasDefaultHeight, photoHeight) / Math.max(this.canvasDefaultHeight, photoHeight);
-        }
+        percent = Math.min(this.canvasDefaultWidth, photoWidth) / Math.max(this.canvasDefaultWidth, photoWidth);
         return percent;
     },
     clear: function () {

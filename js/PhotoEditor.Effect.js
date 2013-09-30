@@ -28,8 +28,8 @@ PhotoEditor.Effect.prototype = {
         this._brownContext = this._brownCanvas.getContext("2d");
         this._sepiaCanvas = document.getElementById("_sepia");
         this._sepiaContext = this._sepiaCanvas.getContext("2d");
-        this._noiseCanvas = document.getElementById("_noise");
-        this._noiseContext = this._noiseCanvas.getContext("2d");
+        this._dawnCanvas = document.getElementById("_dawn");
+        this._dawnContext = this._dawnCanvas.getContext("2d");
         this._negativeCanvas = document.getElementById("_negative");
         this._negativeContext = this._negativeCanvas.getContext("2d");
         this._blurCanvas = document.getElementById("_blur");
@@ -38,6 +38,11 @@ PhotoEditor.Effect.prototype = {
         this._embossContext = this._embossCanvas.getContext("2d");
         this._sharpenCanvas = document.getElementById("_sharpen");
         this._sharpenContext = this._sharpenCanvas.getContext("2d");
+        this._laplacianCanvas = document.getElementById("_laplacian");
+        this._laplacianContext= this._laplacianCanvas.getContext("2d");
+        this.pinkCanvas = document.getElementById("_pink");
+        this.pinkContext = this.pinkCanvas.getContext("2d");
+
     },
     onLoadFilter: function (canvasImage) {
         this._originContext.drawImage(canvasImage.getImage(),
@@ -57,9 +62,6 @@ PhotoEditor.Effect.prototype = {
         var sepiaImageData = PhotoEditor.Filters.Sepia(originImageData);
         this._putImageData(this._sepiaContext, sepiaImageData);
 
-        var noiseImageData = PhotoEditor.Filters.Noise(originImageData);
-        this._putImageData(this._noiseContext, noiseImageData);
-
         var negativeImageData = PhotoEditor.Filters.Negative(originImageData);
         this._putImageData(this._negativeContext, negativeImageData);
 
@@ -71,6 +73,15 @@ PhotoEditor.Effect.prototype = {
 
         var sharpenImageData = PhotoEditor.Filters.Sharpen(originImageData);
         this._putImageData(this._sharpenContext, sharpenImageData);
+
+        var labplacianImageData = PhotoEditor.Filters.Laplacian(originImageData);
+        this._putImageData(this._laplacianContext, labplacianImageData);
+
+        var dawnImageData = PhotoEditor.Filters.Dawn(originImageData);
+        this._putImageData(this._dawnContext, dawnImageData);
+
+        var unShartpImageData = PhotoEditor.Filters.Pink(originImageData);
+        this._putImageData(this.pinkContext, unShartpImageData);
 
     },
     _putImageData : function(contextTarget, drawImagedata){

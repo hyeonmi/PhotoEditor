@@ -68,11 +68,15 @@ PhotoEditor.Canvas.Controller.prototype = {
         $("#_brightness").on("click", $.proxy(this._onClickFilters, this, "Brightness"));
         $("#_brown").on("click", $.proxy(this._onClickFilters, this, "Brown"));
         $("#_sepia").on("click", $.proxy(this._onClickFilters, this, "Sepia"));
-        $("#_noise").on("click", $.proxy(this._onClickFilters, this, "Noise"));
         $("#_negative").on("click", $.proxy(this._onClickFilters, this, "Negative"));
         $("#_blur").on("click", $.proxy(this._onClickFilters, this, "Blur"));
         $("#_emboss").on("click", $.proxy(this._onClickFilters, this, "Emboss"));
         $("#_sharpen").on("click", $.proxy(this._onClickFilters, this, "Sharpen"));
+        $("#_laplacian").on("click", $.proxy(this._onClickFilters, this, "Laplacian"));
+
+        $("#_dawn").on("click", $.proxy(this._onClickFilters, this, "Dawn"));
+        $("#_pink").on("click", $.proxy(this._onClickFilters, this, "Pink"));
+
         $(".btn_save").on("click", $.proxy(this._onClickSave, this));
         this._allDelete.on("click", $.proxy(this._onClickAllDelete, this));
     },
@@ -160,6 +164,13 @@ PhotoEditor.Canvas.Controller.prototype = {
     _onClickThumbnail : function(event){
         var thumbnail = $(event.currentTarget);
         this.createCanvasImageBy(thumbnail);
+        this._initResizeSelect();
+
+    },
+    _initResizeSelect : function(){
+        var selectBox = this._resizeSel.find("option:eq(0)");
+        selectBox.val(this._Canvas.canvasDefaultWidth);
+        selectBox.prop("selected","selected");
     },
     /**
      * 효과탭의 필터 미리 보기 클릭시 호출되는 이벤트
@@ -185,7 +196,7 @@ PhotoEditor.Canvas.Controller.prototype = {
     },
     /** 가로 크기 변경 */
     _onChangeResizeSel: function () {
-        var width = this._resizeSel.children(":selected").text();
+        var width = this._resizeSel.children(":selected").val();
         if (isNaN(width)) {
             return false;
         }
@@ -255,7 +266,6 @@ PhotoEditor.Canvas.Controller.prototype = {
             "fileSrc": thumbnail[0].src,
             "callback": $.proxy(this._loadImage, this)
         });
-        this._setChangeCanvasImageSize(this._CanvasImage.getWidth(), this._CanvasImage.getHeight());
     },
     /**
      * 캔버스의 이미지가 로드됐을때 호출된다
@@ -264,6 +274,7 @@ PhotoEditor.Canvas.Controller.prototype = {
     _loadImage: function () {
         this._Canvas.drawImage(this._CanvasImage);
         this._saveCanvasImage();
+        this._setChangeCanvasImageSize(this._CanvasImage.getWidth(), this._CanvasImage.getHeight());
         this._Effect.onLoadFilter(this._CanvasImage);
     },
     /** rotate */

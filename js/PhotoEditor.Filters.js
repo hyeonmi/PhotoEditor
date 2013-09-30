@@ -108,16 +108,24 @@ PhotoEditor.Filters = {
         }
         return copyImageData;
     },
-
-    Noise : function(imageData){
+    Dawn : function(imageData){
         var copyImageData = this.copyImageData(imageData);
         var d = copyImageData.data;
-        var factor = 55;
-        var rand =  (0.5 - Math.random()) * factor;
-        for (var index = 0; index < d.length-4; index += 4) {
-            d[index] =  d[index] + rand;
-            d[index+1] = d[index+1] + rand;
-            d[index+2] = d[index+2] + rand;
+        for (var j = 0; j < d.length-4; j += 4) {
+            d[j] =  d[j];
+            d[j+1] = d[j+1] + 10;
+            d[j+2] = d[j+2] + 35;
+        }
+        return copyImageData;
+    },
+    Pink : function(imageData){
+        var copyImageData = this.copyImageData(imageData);
+        var d = copyImageData.data;
+        for (var j = 0; j < d.length-4; j += 4) {
+            d[j] =  d[j] + 30;
+            d[j+1] = d[j+1];
+            d[j+2] = d[j+2]+30;
+            d[j+3] = d[j+3] +10
         }
         return copyImageData;
     },
@@ -132,12 +140,18 @@ PhotoEditor.Filters = {
         return copyImageData;
     },
     Blur : function(imageData){
+//        var matrix = [
+//            1/9, 1/9,1/9,
+//            1/9, 1/9,1/9,
+//            1/9, 1/9,1/9
+//        ];
         var matrix = [
-            1/9, 1/9,1/9,
-            1/9, 1/9,1/9,
-            1/9, 1/9,1/9
+            1/16, 2/16, 1/16,
+            2/16, 4/16, 2/16,
+            1/16, 2/16, 1/16
+
         ];
-        return this.Convolve(imageData, matrix, 1);
+        return this.Convolve(imageData, matrix);
     },
     Sharpen : function(imageData){
         var matrix = [
@@ -145,7 +159,7 @@ PhotoEditor.Filters = {
             -1, 5, -1,
             0, -1,  0
         ];
-        return this.Convolve(imageData, matrix,1);
+        return this.Convolve(imageData, matrix);
     },
     Emboss : function(imageData){
         var matrix = [
@@ -153,6 +167,14 @@ PhotoEditor.Filters = {
             1, 0.8, -1,
             -1, -1, -1
         ];
-        return this.Convolve(imageData, matrix,1);
+        return this.Convolve(imageData, matrix);
+    },
+    Laplacian : function(imageData){
+        var matix =[
+            1, 1, 1,
+            1,-8, 1,
+            1, 1, 1
+        ];
+        return this.Convolve(imageData, matix);
     }
 };
