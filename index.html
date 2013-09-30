@@ -11,7 +11,7 @@
  <header>
   <div class="title">
    <h1>PhotoEditor</h1>
-   <p>한 장당 5MB 최대 10장 까지 사진 선택 가능 합니다.</p>
+   <p>한 장당 5MB 최대 8장 까지 사진 선택 가능 합니다.</p>
   </div>
      <style type="text/css">
          .thumb ul li img{width:100px;height:75px}
@@ -59,7 +59,7 @@
      사진 크기 <span class="img_size_value"> W : <em id="_photo_width">700</em>  H : <em id="_photo_height">700</em></span>
     </p>
     <select id="_resize_slt">
-    <option value="650">가로크기변경</option>
+    <option value="">가로크기변경</option>
     <option value="740">740</option>
     <option value="650">650</option>
 	<option value="550">550</option>
@@ -89,16 +89,19 @@
     </ul>
     <div class="box_wrap _effect" style="display:block">
      <ul>
-        <li class="origin"><canvas style="width:60px;height:60px" class="filter" width="60" height="60" id="_origin"></canvas></li>
-        <li class="gray"><canvas style="width:60px;height:60px" class="filter" width="60" height="60" id="_grayscale"></canvas></li>
-        <li class="brightness"><canvas class="filter" width="60" height="60" id="_brightness"></canvas></li>
-        <li class="brown"><canvas class="filter" width="60" height="60" id="_brown"></canvas></li>
-        <li class=""><canvas class="filter" width="60" height="60" id="_sepia"></canvas></li>
-         <li class=""><canvas class="filter" width="60" height="60" id="_noise"></canvas></li>
-         <li class="blur"><canvas class="filter" width="60" height="60" id="_blur"></canvas></li>
-         <li class=""><canvas class="filter" width="60" height="60" id="_negative"></canvas></li>
-        <li class=""><canvas class="filter" width="60" height="60" id="_emboss"></canvas></li>
-        <li class=""><canvas class="filter" width="60" height="60" id="_sharpen"></canvas></li>
+         <li><canvas class="filter" width="80" height="80" id="_origin"></canvas><p>원본</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_grayscale"></canvas><p>그레이</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_brightness"></canvas><p>밝게</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_brown"></canvas><p>브라운</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_sepia"></canvas><p>세피아</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_dawn"></canvas><p>새벽</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_pink"></canvas><p>핑크</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_negative"></canvas><p>반전</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_blur"></canvas><p>흐린</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_emboss"></canvas><p>엠보스</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_sharpen"></canvas><p>선명하게</p></li>
+         <li><canvas class="filter" width="80" height="80" id="_laplacian"></canvas><p>라프라시안</p></li>
+
      </ul>
     </div>
 	<div class="box_wrap 2 _tone" style="display:none">
