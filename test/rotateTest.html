@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div style="border-color: gray;border:1px solid;">
+        <canvas id="canvas" width="500" height="500">
+            canvas
+        </canvas>
+    </div>
+</body>
+<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    var img = new Image();
+    var radian = 90 * Math.PI /180;
+    var width = 50;
+    var height = 100;
+    var x1 = 100, y1 = 100 ;
+    var x2 = 300, y2 = 100;
+    img.src = "img/border-color-icon.png";
+    this.img.onload = function(){
+        //양의 각도
+        context.save();
+        context.drawImage(img, x1, y1, width, height);
+        context.restore();
+
+
+        context.save();
+        context.translate(x1, y1);
+        context.rotate(90 * Math.PI /180);
+        //context.drawImage(img, 0, 0, width, height);
+        context.drawImage(img, 0, -height, width, height);
+        context.restore();
+
+        context.save();
+        context.translate(x1, y1);
+        context.rotate(180 * Math.PI /180);
+        //context.drawImage(img, 0, 0, width, height);
+        context.drawImage(img, -width, -height, width, height);
+        context.restore();
+
+        context.save();
+        context.translate(x1, y1);
+        context.rotate(270 * Math.PI /180);
+        //context.drawImage(img, 0, 0, width, height);
+        context.drawImage(img, -width, 0, width, height);
+        context.restore();
+
+        //음의 각도
+        context.save();
+        context.drawImage(img, x2, y2, width, height);
+        context.restore();
+
+        context.save();
+        context.translate(x2, y2);
+        context.rotate(-90 * Math.PI /180);
+        //context.drawImage(img, 0, 0, width, height);
+        context.drawImage(img, -width, 0, width, height);
+        context.restore();
+
+        context.save();
+        context.translate(x2, y2);
+        context.rotate(-180 * Math.PI /180);
+        //context.drawImage(img, 0, 0, width, height);
+        context.drawImage(img, -width, -height, width, height);
+        context.restore();
+
+        context.save();
+        context.translate(x2, y2);
+        context.rotate(-270 * Math.PI /180);
+        //context.drawImage(img, 0, 0, width, height);
+        context.drawImage(img, 0, -height, width, height);
+        context.restore();
+    }
+
+
+</script>
+</html>

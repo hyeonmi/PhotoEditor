@@ -18,7 +18,7 @@
      </style>
  </header>
  <!-- //header -->
-   
+
  <!-- container -->
  <div class="container">
   <!-- content -->
@@ -55,7 +55,7 @@
    </section>
    <section class="tool_area">
     <h2 class="blind">편집 버튼 모음</h2>
-    <p class="img_size_txt"> 
+    <p class="img_size_txt">
      사진 크기 <span class="img_size_value"> W : <em id="_photo_width">700</em>  H : <em id="_photo_height">700</em></span>
     </p>
     <select id="_resize_slt">
@@ -70,13 +70,13 @@
     <!--button type="button" class="btn_apply" id="_resize_all_btn">전체적용</button>
     <button type="button" class="btn_cancel" id="_undone_btn">실행취소</button>
     <button type="button" class="btn_replay" id="_restore_btn">다시실행</button-->
-    <button type="button" class="btn_rr" id="_rotate_right_btn"><img src="img/arrow-circle-right-icon.png" alt="오른쪽회전"/></button>
-    <button type="button" class="btn_rr" id="_rotate_left_btn"><img src="img/arrow-circle-left-icon.png" alt="왼쪽회전"/></button>
-    <button type="button" class="btn_rr" id="_crop_btn"><img src="img/image-crop-icon.png" alt="자르기"/></button>
-    <button type="button" class="btn_rr" id="_flip_vtc"><img src="img/layer-flip-vtc.png" alt="수직반전"/></button>
-    <button type="button" class="btn_rr" id="_flip_hrz"><img src="img/layer-flip-hrz.png" alt="수평반전"/></button>
+    <button type="button" class="btn_rr" id="_rotate_right_btn"><img src="images/arrow-circle-right-icon.png" alt="오른쪽회전"/></button>
+    <button type="button" class="btn_rr" id="_rotate_left_btn"><img src="images/arrow-circle-left-icon.png" alt="왼쪽회전"/></button>
+    <button type="button" class="btn_rr" id="_crop_btn"><img src="images/image-crop-icon.png" alt="자르기"/></button>
+    <button type="button" class="btn_rr" id="_flip_vtc"><img src="images/layer-flip-vtc.png" alt="수직반전"/></button>
+    <button type="button" class="btn_rr" id="_flip_hrz"><img src="images/layer-flip-hrz.png" alt="수평반전"/></button>
    </section>
-   
+
    <section class="tab_area">
     <h2 class="blind">편집 툴 모음</h2>
     <ul class="tab_menu">
@@ -137,8 +137,8 @@
 			<option>9</option>
 			<option>10</option>
 			</select>
-			<button type="button" class="btn_bold"><img src="img/border-color-icon.png" alt="굵게"/></button>
-			<button type="button" class="btn_slope"><img src="img/edit-italic.png" alt="기울게"/></button>
+			<button type="button" class="btn_bold"><img src="images/border-color-icon.png" alt="굵게"/></button>
+			<button type="button" class="btn_slope"><img src="images/edit-italic.png" alt="기울게"/></button>
 			<div class="color_box"></div>
 			<span class="color_txt"> #FFFFFF </span>
 		</div>
@@ -163,23 +163,23 @@
  </footer>
  <!-- //footer -->
 </div>
-    <script type="text/javascript" src="js/vendor/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.File.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Canvas.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Canvas.Controller.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Edit.Flip.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Edit.Rotate.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Edit.Crop.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Thumbnail.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Image.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Filters.js"></script>
-    <script type="text/javascript" src="js/PhotoEditor.Effect.js"></script>
-     <script type="text/javascript">
-        window.onload = function(){
-            (function(){
-                var canvasController = new PhotoEditor.Canvas.Controller();
-            })();
-        }
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <script src="js/PhotoEditor.File.js"></script>
+    <script src="js/PhotoEditor.Canvas.js"></script>
+    <script src="js/PhotoEditor.Canvas.Controller.js"></script>
+    <script src="js/PhotoEditor.Edit.Flip.js"></script>
+    <script src="js/PhotoEditor.Edit.Rotate.js"></script>
+    <script src="js/PhotoEditor.Edit.Crop.js"></script>
+    <script src="js/PhotoEditor.Thumbnail.js"></script>
+    <script src="js/PhotoEditor.Image.js"></script>
+    <script src="js/PhotoEditor.Filters.js"></script>
+    <script src="js/PhotoEditor.Effect.js"></script>
+    <script>
+      $(function(){
+          var canvasController = new PhotoEditor.Canvas.Controller();
+      })
     </script>
 </body>
 </html>

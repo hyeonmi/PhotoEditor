@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>effect Test</title>
+</head>
+<body>
+<div>
+<button id="save">save</button>
+<div style="border-color: gray;border:1px solid;width:200px;height:200px">
+    <canvas id="canvas" width="200" height="200">
+        canvas
+    </canvas>
+</div>
+<div style="border-color: gray;border:1px solid;width:200px;height:200px">
+    <canvas id="brightness_canvas" width="200" height="200">
+        canvas
+    </canvas>
+</div>
+<div style="border-color: gray;border:1px solid;width:200px;height:200px">
+    <canvas id="grayscale_canvas" width="200" height="200">
+        canvas
+    </canvas>
+</div>
+<div style="border-color: gray;border:1px solid;width:200px;height:200px">
+    <canvas id="brown_canvas" width="200" height="200">
+        canvas
+    </canvas>
+</div>
+<div style="border-color: gray;border:1px solid;width:200px;height:200px">
+    <canvas id="blur_canvas" width="200" height="200">
+        canvas
+    </canvas>
+</div>
+</div>
+<script type="text/javascript" src="../js/vendor/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+var canvas = document.getElementById("canvas"),
+    context = canvas.getContext("2d");
+var brightnessCanvas = document.getElementById("brightness_canvas"),
+    brightnessContext = brightnessCanvas.getContext("2d");
+var grayCanvas = document.getElementById("grayscale_canvas"),
+    grayContext = grayCanvas.getContext("2d");
+var brownCanvas = document.getElementById("brown_canvas");
+    brownContext = brownCanvas.getContext("2d");
+var blurCanvas = document.getElementById("blur_canvas");
+    blurContext = blurCanvas.getContext("2d");
+
+$("#save").on("click", function(){
+    var strDownloadMime = "image/octet-stream";
+    var strMime = "image/jpeg";
+    var strData = canvas.toDataURL("image/jpeg");
+    document.location.href = strData.replace(strMime, strDownloadMime);
+
+});
+var img = new Image();
+    img.src = "img/hb3.png";
+    img.onload = function(){
+        context.drawImage(img, 0,0, canvas.width, canvas.height);
+        //brigness
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        var d = imageData.data;
+        var adjustment = 30;
+        for (var j = 0; j < d.length; j += 4) {
+            d[j] += adjustment;
+            d[j+1] += adjustment;
+            d[j+2] += adjustment;
+        }
+        brightnessContext.putImageData(imageData, 0, 0);
+
+        //grayscale
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        var d = imageData.data;
+        for (var j = 0; j < d.length-4; j += 4) {
+            var average = (d[j] + d[j+1] + d[j+2])/3
+            d[j] = d[j+1] = d[j+2] = average;
+        }
+        grayContext.putImageData(imageData, 0, 0);
+
+        //brown
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        var d = imageData.data;
+        for (var j = 0; j < d.length-4; j += 4) {
+            d[j] =  d[j] + 30;
+            d[j+1] = d[j+1] + 10;
+            d[j+2] = d[j+2];
+        }
+        brownContext.putImageData(imageData, 0, 0);
+
+
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+//        var weights = [  0, -1,  0,
+//                        -1,  5, -1,
+//                        0, -1,  0 ];
+        var weights = [ 1/9, 1/9, 1/9,
+            1/9, 1/9, 1/9,
+            1/9, 1/9, 1/9 ];
+
+        var opaque = 1;
+        var side = Math.round(Math.sqrt(weights.length));
+        var halfSide = Math.floor(side/2);
+        var src = imageData.data;
+        var sw = imageData.width;
+        var sh = imageData.height;
+        // pad output by the convolution matrix
+        var w = sw;
+        var h = sh;
+        var output = blurContext.createImageData(w, h);
+        var dst = output.data;
+        // go through the destination image imageData
+        var alphaFac = opaque ? 1 : 0;
+        for (var y=0; y<h; y++) {
+            for (var x=0; x<w; x++) {
+                var sy = y;
+                var sx = x;
+                var dstOff = (y*w+x)*4;
+                // calculate the weighed sum of the source image imageData that
+                // fall under the convolution matrix
+                var r=0, g=0, b=0, a=0;
+                for (var cy=0; cy<side; cy++) {
+                    for (var cx=0; cx<side; cx++) {
+                        var scy = sy + cy - halfSide;
+                        var scx = sx + cx - halfSide;
+                        if (scy >= 0 && scy < sh && scx >= 0 && scx < sw) {
+                            var srcOff = (scy*sw+scx)*4;
+                            var wt = weights[cy*side+cx];
+                            r += src[srcOff] * wt;
+                            g += src[srcOff+1] * wt;
+                            b += src[srcOff+2] * wt;
+                            a += src[srcOff+3] * wt;
+                        }
+                    }
+                }
+                dst[dstOff] = r;
+                dst[dstOff+1] = g;
+                dst[dstOff+2] = b;
+                dst[dstOff+3] = a + alphaFac*(255-a);
+            }
+        }
+
+        blurContext.putImageData(output, 0, 0);
+
+    }
+
+
+
+
+</script>
+
+</body>
+</html>
