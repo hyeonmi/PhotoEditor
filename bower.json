@@ -1,0 +1,27 @@
+{
+  "name": "PhotoEditor",
+  "version": "0.1.0",
+  "homepage": "https://github.com/hyeonmi/PhotoEditor",
+  "authors": [
+    "Hyeon-Mi Kim"
+  ],
+  "main": "PhotoEditor.js",
+  "keywords": [
+    "javascript",
+    "canvas",
+    "photo",
+    "editor",
+    "effect"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery-1.11.1": "~2.1.3"
+  }
+}
