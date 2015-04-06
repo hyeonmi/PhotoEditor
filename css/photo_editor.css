@@ -12,13 +12,13 @@ a:hover,a:active,a:focus{text-decoration:underline}
 .blind{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:0}
 
 .wrap{width:1150px;margin:20px;font-family:'Helvetica','돋움',Dotum;font-size:12px}
-header{padding:20px;color:#3b86c2;background:url(../img/bg_tit.png) repeat;background-color:#000}
+header{padding:20px;color:#3b86c2;background:url(../images/bg_tit.png) repeat;background-color:#000}
 header p{color:#ccc}
 .container{overflow:hidden;background-color:#000}
 .thumb{float:left;width:130px;height:740px;background:#292929}
 .thumb ul li{width:105px;height:80px;margin:10px 0 12px 20px; background:#000;-webkit-border-radius:5px;-webkit-box-shadow:2px 2px 3px rgba(0,0,0,.4)}
 .content{float:left;width:720px;height:740px;background:#292929}
-.content .canvas{overflow:auto;overflow-x:auto;overflow-y:auto;position:relative;width:700px;height:720px;margin:10px;border-right:solid 1px #2b3a46;border-bottom:solid 1px #2b3a46;background:url(../img/bg_mozaic.png)repeat}
+.content .canvas{overflow:auto;overflow-x:auto;overflow-y:auto;position:relative;width:700px;height:720px;margin:10px;border-right:solid 1px #2b3a46;border-bottom:solid 1px #2b3a46;background:url(../images/bg_mozaic.png)repeat}
 .content .canvas img{display:block;position:absolute;top:10px;left:50%;margin-left:-340px;-webkit-box-shadow:2px 2px 3px rgba(0,0,0,.4)}
 .controls{float:left;width:300px;height:720px}
 .controls select{height:24px;background-color:#444;color:#888;border-color:#333}
