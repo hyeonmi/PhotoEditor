@@ -15,8 +15,6 @@
     "**/*.html"
   ],
   "dependencies": {
-    "backbone": "~1.1.0",
-    "underscore": "~1.5.2",
     "jquery": "~2.0.2",
     "jasmine": "~2.2.1"
   }
